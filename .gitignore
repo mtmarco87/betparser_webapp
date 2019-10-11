@@ -25,6 +25,7 @@
 !.vscode/extensions.json
 
 # misc
+.Firebase/
 /.sass-cache
 /connect.lock
 /coverage
