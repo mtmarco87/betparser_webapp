@@ -5,19 +5,25 @@ import { BetsListComponent } from './features/bets/containers/bets-list/bets-lis
 
 const routes: Routes = [
     { path: '', redirectTo: 'home', pathMatch: 'full' },
-    {
-        path: 'home',
-        component: HomeComponent
-    },
-    {
-        path: 'bets',
-        component: BetsListComponent
-    },
-    { path: '**', redirectTo: 'home', pathMatch: 'full' },
+    { path: 'home', component: HomeComponent },
+    { path: 'bets', component: BetsListComponent },
+    { path: 'others', component: HomeComponent },
+    { path: '**', redirectTo: 'home', pathMatch: 'full' }
 ];
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule]
 })
-export class AppRoutingModule { } 
+export class AppRoutingModule { }
+
+// Children routing example:
+// {
+//     path: '', 
+//     children: [
+//         { path: '', redirectTo: 'home', pathMatch: 'full' },
+//         { path: 'home', component: HomeComponent },
+//         { path: 'bets', component: BetsListComponent },
+//         { path: '**', redirectTo: 'home', pathMatch: 'full' }
+//      ]
+//   },

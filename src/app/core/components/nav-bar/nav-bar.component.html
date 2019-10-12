@@ -2,7 +2,7 @@
 <nav id="nav">
     <ul>
         <li *ngFor="let navLink of navLinks">
-            <a [routerLink]="[navLink.link]" [class.active]="navLink.isActive" (click)="activateNavLink(navLink.id)">
+            <a [routerLink]="[navLink.link]" [class.active]="navLink.isActive">
                 <span class="icon" [ngClass]="navLink.className"></span>
             </a>
         </li>
