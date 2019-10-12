@@ -1,29 +1,31 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { HomeComponent } from './features/home/components/home/home.component';
-import { BetsListComponent } from './features/bets/containers/bets-list/bets-list.component';
+import { NgModule } from "@angular/core";
+import { Routes, RouterModule } from "@angular/router";
+import { AdminLayoutComponent } from "./layouts/admin-layout/admin-layout.component";
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
+
 
 const routes: Routes = [
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
-    { path: 'home', component: HomeComponent },
-    { path: 'bets', component: BetsListComponent },
-    { path: 'others', component: HomeComponent },
-    { path: '**', redirectTo: 'home', pathMatch: 'full' }
+    { path: "", redirectTo: "dashboard", pathMatch: "full" },
+    { path: "",
+      component: AdminLayoutComponent,
+      children: [
+          { path: "", loadChildren: "./layouts/admin-layout/admin-layout.module#AdminLayoutModule" }
+      ]
+    },
+    { path: '',
+      component: AuthLayoutComponent,
+      children: [
+          { path: '', loadChildren: './layouts/auth-layout/auth-layout.module#AuthLayoutModule' }
+      ]
+    },
+    { path: "**", redirectTo: "dashboard" }
 ];
 
+
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
+    imports: [
+        RouterModule.forRoot(routes)
+    ],
     exports: [RouterModule]
 })
 export class AppRoutingModule { }
-
-// Children routing example:
-// {
-//     path: '', 
-//     children: [
-//         { path: '', redirectTo: 'home', pathMatch: 'full' },
-//         { path: 'home', component: HomeComponent },
-//         { path: 'bets', component: BetsListComponent },
-//         { path: '**', redirectTo: 'home', pathMatch: 'full' }
-//      ]
-//   },

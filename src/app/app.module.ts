@@ -1,25 +1,24 @@
-import { environment } from './../environments/environment';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { AngularFireModule } from '@angular/fire';
-import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-import { HomeComponent } from './features/home/components/home/home.component';
-import { BetsListComponent } from './features/bets/containers/bets-list/bets-list.component';
-import { NavBarComponent } from './core/components/nav-bar/nav-bar.component';
+import { NgModule } from "@angular/core";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { RouterModule } from "@angular/router";
+import { ToastrModule } from 'ngx-toastr';
+
+import { AppComponent } from "./app.component";
+import { AppRoutingModule } from "./app-routing.module";
+import { AdminLayoutModule } from './layouts/admin-layout/admin-layout.module';
+import { AuthLayoutModule } from './layouts/auth-layout/auth-layout.module';
 
 
 @NgModule({
-  declarations: [
-    AppComponent, HomeComponent, BetsListComponent, NavBarComponent
-  ],
   imports: [
-    BrowserModule,
+    BrowserAnimationsModule,
+    RouterModule,
     AppRoutingModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFireDatabaseModule
+    ToastrModule.forRoot(),
+    AdminLayoutModule,
+    AuthLayoutModule
   ],
+  declarations: [AppComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

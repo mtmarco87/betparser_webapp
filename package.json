@@ -1,14 +1,22 @@
 {
   "name": "betparser-web-app",
-  "version": "0.0.0",
+  "version": "1.0.1",
+  "description": "BetParserWebApp, a Creative Tim Desgin. Coded by EmaMarcoFricaTrina",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/creativetimofficial/black-dashboard-angular.git"
+  },
+  "author": "EmaMarcoFricaTrina <emamarcotrinafrica@gmail.com> (https://www.emamarcofricatrina.com/)",
+  "license": "commercial",
   "private": true,
   "dependencies": {
     "@angular/animations": "^8.2.8",
@@ -21,9 +29,13 @@
     "@angular/platform-browser": "^8.2.8",
     "@angular/platform-browser-dynamic": "^8.2.8",
     "@angular/router": "^8.2.8",
+    "@ng-bootstrap/ng-bootstrap": "4.2.1",
+    "chart.js": "2.8.0",
     "core-js": "^3.2.1",
     "firebase": "^7.2.0",
+    "ngx-toastr": "10.0.4",
     "rxjs": "^6.5.3",
+    "tslib": "1.10.0",
     "zone.js": "^0.10.2"
   },
   "devDependencies": {
