@@ -43,6 +43,12 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.listTitles = ROUTES.filter(listTitle => listTitle);
     const navbar: HTMLElement = this.element.nativeElement;
     this.toggleButton = navbar.getElementsByClassName("navbar-toggler")[0];
+    if(this.isHome()){
+      this.toggleButton.classList.add("hidden");
+      const titleLabel = navbar.getElementsByClassName("navbar-brand")[0];
+      titleLabel.classList.add("left");
+    }
+
     this.router.events.subscribe(event => {
       this.sidebarClose();
       var $layer: any = document.getElementsByClassName("close-layer")[0];
@@ -170,7 +176,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
         return this.listTitles[item].title;
       }
     }
-    return "Dashboard";
+    return "Home";
+  }
+
+  isHome() {
+    return this.getTitle().toLowerCase() == 'home';
   }
 
   open(content) {

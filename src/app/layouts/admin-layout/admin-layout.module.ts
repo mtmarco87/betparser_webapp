@@ -13,6 +13,7 @@ import { NotificationsModule } from 'app/pages/notifications/notifications.modul
 import { TablesModule } from 'app/pages/tables/tables.module';
 import { TypographyModule } from 'app/pages/typography/typography.module';
 import { UserModule } from 'app/pages/user/user.module';
+import { BetsModule } from 'app/pages/bets/bets.module';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { UserModule } from 'app/pages/user/user.module';
     RouterModule.forChild(AdminLayoutRoutes),
     CoreModule,
     DashboardModule,
+    BetsModule,
     IconsModule,
     MapModule,
     NotificationsModule,

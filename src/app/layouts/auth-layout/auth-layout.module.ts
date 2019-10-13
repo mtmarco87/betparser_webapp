@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 
 import { AuthLayoutRoutes } from './auth-layout.routing';
 import { AuthLayoutComponent } from './auth-layout.component';
-import { CoreModule } from 'app/core/core.module';
 import { RtlModule } from 'app/pages/rtl/rtl.module';
 
 
@@ -14,7 +13,6 @@ import { RtlModule } from 'app/pages/rtl/rtl.module';
     NgbModule,
     CommonModule,
     RouterModule.forChild(AuthLayoutRoutes),
-    CoreModule,
     RtlModule
   ],
   declarations: [

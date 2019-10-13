@@ -7,6 +7,7 @@ import { AppComponent } from "./app.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { AdminLayoutModule } from './layouts/admin-layout/admin-layout.module';
 import { AuthLayoutModule } from './layouts/auth-layout/auth-layout.module';
+import { HomeLayoutModule } from './layouts/home-layout/home-layout.module';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { AuthLayoutModule } from './layouts/auth-layout/auth-layout.module';
     AppRoutingModule,
     ToastrModule.forRoot(),
     AdminLayoutModule,
-    AuthLayoutModule
+    AuthLayoutModule,
+    HomeLayoutModule
   ],
   declarations: [AppComponent],
   providers: [],
