@@ -6,12 +6,17 @@ import { NotificationsComponent } from "../../pages/notifications/components/not
 import { UserComponent } from "../../pages/user/components/user/user.component";
 import { TablesComponent } from "../../pages/tables/components/tables/tables.component";
 import { TypographyComponent } from "../../pages/typography/components/typography/typography.component";
-import { BetsComponent } from 'app/pages/bets/components/bets/bets.component';
+import { BetsComponent } from 'app/pages/bets/container/bets.component';
 
 
 export const AdminLayoutRoutes: Routes = [
+  { path: "bets",
+    component: BetsComponent,
+    children: [
+      { path: "", loadChildren: "../../pages/bets/bets.module#BetsModule" }
+    ]
+  },
   { path: "dashboard", component: DashboardComponent },
-  { path: "bets", component: BetsComponent },
   { path: "icons", component: IconsComponent },
   { path: "maps", component: MapComponent },
   { path: "notifications", component: NotificationsComponent },

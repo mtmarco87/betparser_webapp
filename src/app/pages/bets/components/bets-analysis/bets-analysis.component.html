@@ -1,0 +1,81 @@
+<div class="content">
+  <div class="row">
+    <div *ngFor="let matchGroup of matchGroupsByDate" class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">{{ matchGroup.Date }}</h4>
+          <p class="category">Matchday</p>
+        </div>
+        <div class="card-body">
+          <div *ngFor="let match of matchGroup.children" class="card">
+            <div class="card-header">
+              <h4 class="card-title">{{ match.Name }}</h4>
+            </div>
+            <div class="card-body">
+              <p class="category">
+                <b>STARTS ON:</b> {{ match.getStartDateTime() }}
+                <span *ngIf="match.isRealTime()">
+                  , <b>REAL TIME:</b> {{ match.RealTime }}, <b>RESULT:</b> {{
+                  match.Result }}
+                </span>
+              </p>
+              <p class="category">
+                <b>TEAM 1:</b> {{ match.Team1 }}, <b>TEAM 2:</b> {{ match.Team2
+                }}
+              </p>
+              <br>
+              <h4>Odds Comparison</h4>
+              <div class="table-responsive">
+                <table class="table tablesorter" id="">
+                  <thead class="text-primary">
+                    <tr>
+                      <th class="text-center"></th>
+                      <th *ngFor="let bmMatch of match.children"
+                        class="text-center">{{ bmMatch.Bookmaker }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="text-center"><b>1</b></td>
+                      <td *ngFor="let bmMatch of match.children"
+                        class="text-center"
+                        [ngClass]="(match.getMaxQuote('1') == bmMatch.Quote1) ? 'highlight' : ''"> 
+                        {{ bmMatch.Quote1 }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-center"><b>X</b></td>
+                      <td *ngFor="let bmMatch of match.children"
+                        class="text-center"
+                        [ngClass]="(match.getMaxQuote('X') == bmMatch.QuoteX) ? 'highlight' : ''"> 
+                        {{ bmMatch.QuoteX }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="text-center"><b>2</b></td>
+                      <td *ngFor="let bmMatch of match.children"
+                        class="text-center"
+                        [ngClass]="(match.getMaxQuote('2') == bmMatch.Quote2) ? 'highlight' : ''"> 
+                        {{ bmMatch.Quote2 }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <br>
+              <p class="category">
+                  <b>SUREBET:</b> {{ match.isSureBet() ? 'YES' : 'NO' }}
+                  <span *ngIf="match.isSureBet()">
+                    => {{ match.getOddsInverseSum() }} ({{ match.getSureBetPercent() }})
+                  </span>
+                  <span *ngIf="!match.isSureBet()">
+                    ({{ match.getOddsInverseSum() }})
+                  </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,42 @@
+<div class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Sure Bets</h4>
+          <p class="category">Ranked from Top to Worst</p>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table tablesorter" id="">
+              <thead class="text-primary">
+                <tr>
+                  <th class="text-center">#</th>
+                  <th class="text-center">Match</th>
+                  <th class="text-center">Starts</th>
+                  <th class="text-center">Quote 1 (Bookmaker)</th>
+                  <th class="text-center">Quote X (Bookmaker)</th>
+                  <th class="text-center">Quote 2 (Bookmaker)</th>
+                  <th class="text-center">Odds Inverse Sum</th>
+                  <th class="text-center">Margin Percentage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let sureBet of sureBets; let i = index">
+                  <td class="text-center">{{ i + 1 }}</td>
+                  <td class="text-center">{{ sureBet.MatchName }}</td>
+                  <td class="text-center">{{ sureBet.StartDateTime }}</td>
+                  <td class="text-center">{{ sureBet.Quote1 }}<br>{{ '(' + sureBet.Bookmaker1 + ')' }}</td>
+                  <td class="text-center">{{ sureBet.QuoteX }}<br>{{ '(' + sureBet.BookmakerX + ')' }}</td>
+                  <td class="text-center">{{ sureBet.Quote2 }}<br>{{ '(' + sureBet.Bookmaker2 + ')' }}</td>
+                  <td class="text-center">{{ sureBet.OddsInverseSum }}</td>
+                  <td class="text-center">{{ sureBet.MarginPercentage }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

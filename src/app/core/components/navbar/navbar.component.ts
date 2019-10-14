@@ -1,8 +1,9 @@
 import { Component, OnInit, ElementRef, OnDestroy } from "@angular/core";
 import { ROUTES } from "../sidebar/sidebar.component";
 import { Location } from "@angular/common";
-import { Router } from "@angular/router";
+import { Router, NavigationEnd } from "@angular/router";
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -49,7 +50,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
       titleLabel.classList.add("left");
     }
 
-    this.router.events.subscribe(event => {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+      ).subscribe(event => {
       this.sidebarClose();
       var $layer: any = document.getElementsByClassName("close-layer")[0];
       if ($layer) {
@@ -91,18 +94,24 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   sidebarClose() {
-    const html = document.getElementsByTagName("html")[0];
+    // Revert Sidebar toggle button icon
     this.toggleButton.classList.remove("toggled");
+    
+    // Reposition Main Panel
     const mainPanel = <HTMLElement>(
       document.getElementsByClassName("main-panel")[0]
     );
-
     if (window.innerWidth < 991) {
       setTimeout(function () {
         mainPanel.style.position = "";
       }, 500);
     }
+
+    // Update Sidebar Visibility status
     this.sidebarVisible = false;
+
+    // Make the Sidebar disappear (if navigating on small width)
+    const html = document.getElementsByTagName("html")[0];
     html.classList.remove("nav-open");
   }
 
@@ -166,21 +175,24 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   getTitle() {
-    var titlee = this.location.prepareExternalUrl(this.location.path());
-    if (titlee.charAt(0) === "#") {
-      titlee = titlee.slice(1);
-    }
+    let title = "BetParser";
 
-    for (var item = 0; item < this.listTitles.length; item++) {
-      if (this.listTitles[item].path === titlee) {
-        return this.listTitles[item].title;
+    let currentPath = this.location.prepareExternalUrl(this.location.path());
+    if (currentPath.charAt(0) === "#") {
+      currentPath = currentPath.slice(1);
+    }
+    for (var i = 0; i < this.listTitles.length; i++) {
+      if (this.listTitles[i].path === currentPath) {
+        title += " / " + this.listTitles[i].title;
+        break;
       }
     }
-    return "Home";
+
+    return title;
   }
 
   isHome() {
-    return this.getTitle().toLowerCase() == 'home';
+    return this.getTitle().toLowerCase() === 'betparser';
   }
 
   open(content) {
