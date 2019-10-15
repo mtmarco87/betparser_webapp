@@ -23,7 +23,7 @@ export class BetsFacade {
                     return MatchGroup.createManyFromDb(dbItems);
                 })).subscribe(
                     (matchGroups) => {
-                        this.betsState.setMatchGroups(matchGroups);
+                        this.betsState.setMatchGroups(this.sortMatchGroups(matchGroups));
                         this.betsState.setSureBets(this.extractSureBets(matchGroups));
                         // console.log("New MatchGroups: ", matchGroups);
                     }
@@ -41,6 +41,15 @@ export class BetsFacade {
     getSureBets(): Observable<SureBet[]> {
         // Just pass-through the State value
         return this.betsState.getSureBets();
+    }
+
+    sortMatchGroups(matchGroups: MatchGroup[]): MatchGroup[] {
+        // We sort each MatchGroup descending for number of available bookmaker quotes
+        matchGroups.forEach(matchGroup => {
+            matchGroup.children.sort((a, b) => b.children.length - a.children.length)
+        });
+
+        return matchGroups;
     }
 
     extractSureBets(matchGroups: MatchGroup[]): SureBet[] {
