@@ -57,15 +57,7 @@ export class BetsFacade {
 
         matchGroups.forEach(matchGroup => {
             matchGroup.children.forEach(match => {
-                if (match.isSureBet()) {
-                    const maxQuote1AndBookmaker = match.getMaxQuoteAndBookmaker('1');
-                    const maxQuoteXAndBookmaker = match.getMaxQuoteAndBookmaker('X');
-                    const maxQuote2AndBookmaker = match.getMaxQuoteAndBookmaker('2');
-
-                    sureBets.push(new SureBet(match.Name, match.getStartDateTime(), maxQuote1AndBookmaker[0], maxQuote1AndBookmaker[1],
-                        maxQuoteXAndBookmaker[0], maxQuoteXAndBookmaker[1], maxQuote2AndBookmaker[0], maxQuote2AndBookmaker[1],
-                        match.getOddsInverseSum(), match.getSureBetPercent()));
-                }
+                sureBets = sureBets.concat(match.getSureBets());
             });
         });
 

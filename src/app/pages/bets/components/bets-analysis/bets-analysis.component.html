@@ -1,6 +1,6 @@
 <div class="content">
   <div class="row">
-    <div *ngFor="let matchGroup of matchGroupsByDate" class="col-md-12">
+    <div *ngFor="let matchGroup of matchGroups" class="col-md-12">
       <div class="card">
         <div class="card-header">
           <h4 class="card-title">{{ matchGroup.Date }}</h4>
@@ -13,7 +13,7 @@
             </div>
             <div class="card-body">
               <p class="category">
-                <b>STARTS ON:</b> {{ match.getStartDateTime() }}
+                <b>STARTS:</b> {{ match.getStartDateTime() }}
                 <span *ngIf="match.isRealTime()">
                   , <b>REAL TIME:</b> {{ match.RealTime }}, <b>RESULT:</b> {{
                   match.Result }}
@@ -29,48 +29,51 @@
                 <table class="table tablesorter" id="">
                   <thead class="text-primary">
                     <tr>
-                      <th class="text-center"></th>
-                      <th *ngFor="let bmMatch of match.children"
-                        class="text-center">{{ bmMatch.Bookmaker }}</th>
+                      <th class="text-center table-header">Event</th>
+                      <th *ngFor="let bmInfo of match.children"
+                        class="text-center table-header">{{ bmInfo.Bookmaker }}</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td class="text-center"><b>1</b></td>
-                      <td *ngFor="let bmMatch of match.children"
-                        class="text-center"
-                        [ngClass]="(match.getMaxQuote('1') == bmMatch.Quote1) ? 'highlight' : ''"> 
-                        {{ bmMatch.Quote1 }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-center"><b>X</b></td>
-                      <td *ngFor="let bmMatch of match.children"
-                        class="text-center"
-                        [ngClass]="(match.getMaxQuote('X') == bmMatch.QuoteX) ? 'highlight' : ''"> 
-                        {{ bmMatch.QuoteX }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="text-center"><b>2</b></td>
-                      <td *ngFor="let bmMatch of match.children"
-                        class="text-center"
-                        [ngClass]="(match.getMaxQuote('2') == bmMatch.Quote2) ? 'highlight' : ''"> 
-                        {{ bmMatch.Quote2 }}
-                      </td>
-                    </tr>
+                   <ng-container *ngFor="let quoteGroupType of quoteGroupTypes">
+                      <br/>
+                      <tr>
+                            <td class="text-center table-sub-header"><b>{{ quoteGroupType.Name }}</b></td>
+                            <td *ngFor="let bmInfo of match.children"></td>
+                        </tr>
+                        <ng-container *ngFor="let quoteType of quoteGroupType.subTypes">
+                            <tr>
+                                <td class="text-center"><b>{{ quoteType }}</b></td>
+                                <td *ngFor="let bmInfo of match.children" class="text-center"> 
+                                  <span *ngIf="bmInfo.getQuote(quoteGroupType, quoteType); let quote" 
+                                  [ngClass]="[!quote.isAvailable ? 'not-available' : '', (quote.isAvailable && 
+                                  match.getMaxQuote(quoteGroupType, quoteType).value == quote.Value) ? 'highlight' : '']">
+                                    {{ bmInfo.getQuoteValue(quote) }}
+                                  </span>
+                                </td>
+                            </tr>
+                        </ng-container>      
+                    </ng-container>
                   </tbody>
                 </table>
               </div>
-              <br>
-              <p class="category">
-                  <b>SUREBET:</b> {{ match.isSureBet() ? 'YES' : 'NO' }}
-                  <span *ngIf="match.isSureBet()">
-                    => {{ match.getOddsInverseSum() }} ({{ match.getSureBetPercent() }})
-                  </span>
-                  <span *ngIf="!match.isSureBet()">
-                    ({{ match.getOddsInverseSum() }})
-                  </span>
+              <br/>
+              <h4>Surebets Analysis</h4>
+              <br/>
+              <p *ngIf="match.hasSureBet()" class="category highlight table-footer">
+                <b>SUREBET:</b> YES
+              </p>
+              <p *ngIf="!match.hasSureBet()" class="category table-footer">
+                  <b>SUREBET:</b> NO
+              </p>
+              <br/>
+              <p *ngFor="let quoteGroupType of quoteGroupTypes"  
+              [ngClass]="[match.isSureBet(quoteGroupType) ? 'highlight' : '']" 
+              class="category table-footer">
+                <b>{{ quoteGroupType.Name }}:</b>
+                <span>
+                  => {{ match.getOddsInverseSum(quoteGroupType) }} ({{ match.getMarginPercentage(quoteGroupType) + '%' }})
+                </span>
               </p>
             </div>
           </div>

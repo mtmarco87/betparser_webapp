@@ -1,5 +1,9 @@
-import { BookmakerQuote } from './BookmakerQuote';
+import { BookmakerInfo as BookmakerInfo } from './BookmakerInfo';
 import { BetsUtils } from '../utils/bets.utils';
+import { QuoteGroupType } from './QuoteGroupType';
+import { KeyValue } from '@angular/common';
+import { SureBet } from './SureBet';
+
 
 export class Match {
     Name: string;
@@ -9,10 +13,13 @@ export class Match {
     StartTime: string;
     RealTime: string;
     Result: string;
-    children: BookmakerQuote[];
+    children: BookmakerInfo[];
 
-    constructor(Name: string, Team1: string, Team2: string, StartDate: string, StartTime: string,
-        RealTime: string, Result: string, children: BookmakerQuote[]) {
+    // Cache objects
+    cachedMaxQuotes: KeyValue<string, KeyValue<string[], number>>[] = [];
+
+    constructor(Name: string = null, Team1: string = null, Team2: string = null, StartDate: string = null, StartTime: string = null,
+        RealTime: string = null, Result: string = null, children: BookmakerInfo[] = []) {
         this.Name = Name;
         this.Team1 = Team1;
         this.Team2 = Team2;
@@ -28,113 +35,151 @@ export class Match {
     }
 
     public isRealTime(): boolean {
-        return this.RealTime !== null && this.RealTime !== BetsUtils.NotAvailable && this.Result !== null && this.Result !== BetsUtils.NotAvailable;
+        return this.RealTime !== null && this.RealTime !== BetsUtils.NotAvailable &&
+            this.Result !== null && this.Result !== BetsUtils.NotAvailable;
     }
 
-    public getMaxQuote(quoteType: string): number {
-        let maxQuote = 0;
-        this.children.forEach(child => {
-            if (child['Quote' + quoteType] > maxQuote) {
-                maxQuote = child['Quote' + quoteType];
-            }
-        });
+    public getMaxQuote(quoteGroupType: QuoteGroupType, quoteType: string): KeyValue<string[], number> {
+        let maxQuote: KeyValue<string[], number> = null;
+
+        const cacheKey = quoteGroupType.Name + '-' + quoteType;
+        const cachedMaxQuote = this.cachedMaxQuotes.find(x => x.key === cacheKey);
+        if (cachedMaxQuote === undefined || cachedMaxQuote === null) {
+            maxQuote = { key: [], value: 0 };
+
+            this.children.forEach(bmInfo => {
+                const quote = bmInfo.getQuote(quoteGroupType, quoteType);
+                if (quote.isAvailable && quote.Value > maxQuote.value) {
+                    maxQuote.value = quote.Value;
+                    maxQuote.key = [bmInfo.Bookmaker];
+                }
+                else if (quote.isAvailable && quote.Value === maxQuote.value) {
+                    maxQuote.key.push(bmInfo.Bookmaker);
+                }
+            });
+
+            this.cachedMaxQuotes.push({ key: cacheKey, value: maxQuote });
+        }
+        else {
+            maxQuote = cachedMaxQuote.value;
+        }
 
         return maxQuote;
     }
 
-    public getMaxQuoteAndBookmaker(quoteType: string): Array<any> {
-        let maxQuote = 0;
-        let maxQuoteBookmaker = '';
-        this.children.forEach(child => {
-            if (child['Quote' + quoteType] > maxQuote) {
-                maxQuote = child['Quote' + quoteType];
-                maxQuoteBookmaker = child.Bookmaker;
-            }
-        });
-
-        return [maxQuote, maxQuoteBookmaker];
-    }
-
-    public getOddsInverseSum(): number {
+    public getOddsInverseSum(quoteGroupType: QuoteGroupType): number {
         let oddsInverseSum: number = null;
 
         try {
-            oddsInverseSum = (1 / this.getMaxQuote('1')) + (1 / this.getMaxQuote('X')) + (1 / this.getMaxQuote('2'));
+            for (let i = 0; i < quoteGroupType.subTypes.length; i++) {
+                const quoteType = quoteGroupType.subTypes[i];
+                oddsInverseSum += (1 / this.getMaxQuote(quoteGroupType, quoteType).value);
+            }
             oddsInverseSum = Math.round(oddsInverseSum * 100) / 100;
         } catch (error) {
-            console.error("Error calculating the Odds Invers Sum: " + error);
+            console.error("Error calculating the '" + quoteGroupType.Name + "' Odds Invers Sum: " + error);
         }
 
         return oddsInverseSum;
     }
 
-    public isSureBet(): boolean {
+    public getMarginPercentage(quoteGroupType: QuoteGroupType): number {
+        let marginPercentage: number = null;
+
+        const oddsInverseSum = this.getOddsInverseSum(quoteGroupType);
+        if (oddsInverseSum !== null) {
+            marginPercentage = Math.round((1 - oddsInverseSum) * 100);
+        }
+
+        return marginPercentage;
+    }
+
+    public isSureBet(quoteGroupType: QuoteGroupType): boolean {
         let isSureBet = false;
 
-        if (this.getOddsInverseSum() !== null) {
-            isSureBet = this.getOddsInverseSum() < 1;
+        const oddsInverseSum = this.getOddsInverseSum(quoteGroupType);
+        if (oddsInverseSum !== null) {
+            isSureBet = oddsInverseSum < 1;
         }
 
         return isSureBet;
     }
 
-    public getSureBetPercent(): string {
-        let sureBetPercent: number = null;
+    public hasSureBet(): boolean {
+        let hasSureBet = false;
+        QuoteGroupType.defaultTypes.forEach(quoteGroupType => {
+            hasSureBet = hasSureBet || this.isSureBet(quoteGroupType);
+        });
 
-        if (this.getOddsInverseSum() !== null) {
-            sureBetPercent = Math.round((1 - this.getOddsInverseSum()) * 100);
+        return hasSureBet;
+    }
+
+    public getSureBets(): SureBet[] {
+        const sureBets: SureBet[] = [];
+
+        if (this.hasSureBet()) {
+            QuoteGroupType.defaultTypes.forEach(quoteGroupType => {
+                if (this.isSureBet(quoteGroupType)) {
+                    const sureBet = new SureBet(this.Name, this.getStartDateTime(), this.getOddsInverseSum(quoteGroupType),
+                        this.getMarginPercentage(quoteGroupType), quoteGroupType);
+                    const quotes: KeyValue<string[], number>[] = [];
+                    for (let i = 0; i < quoteGroupType.subTypes.length; i++) {
+                        const quoteType = quoteGroupType.subTypes[i];
+                        quotes.push(this.getMaxQuote(quoteGroupType, quoteType));
+                    }
+                    sureBet.Quotes = quotes;
+
+                    sureBets.push(sureBet);
+                }
+            });
         }
 
-        return sureBetPercent + '%';
+        return sureBets;
     }
 
     public static createFromDb(dbMatch: any): Match {
-        let match: Match = null;
+        let match: Match = new Match();
 
-        let Name = null;
-        let Team1 = null;
-        let Team2 = null;
-        let StartDate = null;
-        let StartTime = null;
-        let RealTime = null;
-        let Result = null;
-        const children: BookmakerQuote[] = [];
+        if (dbMatch !== null && Object.keys(dbMatch).length > 0) {
+            const dbMatchByBookmaker = dbMatch[Object.keys(dbMatch)[0]];
 
-        for (const bookmakerName in dbMatch) {
-            if (dbMatch.hasOwnProperty(bookmakerName)) {
-                let dbMatchByBookmaker = dbMatch[bookmakerName];
-                if ((Name === null || Team1 === null || Team2 === null) &&
-                    dbMatchByBookmaker.Team1 !== undefined && dbMatchByBookmaker.Team2 !== undefined) {
-                    Name = BetsUtils.getMatchFullName(dbMatchByBookmaker.Team1, dbMatchByBookmaker.Team2);
-                    Team1 = dbMatchByBookmaker.Team1;
-                    Team2 = dbMatchByBookmaker.Team2;
-                }
+            if (dbMatchByBookmaker !== undefined && dbMatchByBookmaker.Team1 !== undefined && dbMatchByBookmaker.Team2 !== undefined) {
+                match.Name = BetsUtils.getMatchFullName(dbMatchByBookmaker.Team1, dbMatchByBookmaker.Team2);
+                match.Team1 = dbMatchByBookmaker.Team1;
+                match.Team2 = dbMatchByBookmaker.Team2;
+            }
 
-                if (StartDate === null && dbMatchByBookmaker.StartDate !== undefined) {
-                    StartDate = BetsUtils.getDateString(BetsUtils.getMatchDate(dbMatchByBookmaker.StartDate));
-                }
+            if (dbMatchByBookmaker !== undefined && dbMatchByBookmaker.StartDate !== undefined) {
+                match.StartDate = BetsUtils.getDateString(BetsUtils.getMatchDate(dbMatchByBookmaker.StartDate));
+            }
 
-                if (StartTime === null && dbMatchByBookmaker.StartTime !== undefined) {
-                    StartTime = dbMatchByBookmaker.StartTime;
-                }
+            if (dbMatchByBookmaker !== undefined && dbMatchByBookmaker.StartTime !== undefined) {
+                match.StartTime = dbMatchByBookmaker.StartTime;
+            }
 
-                if (RealTime === null && dbMatchByBookmaker.RealTime !== undefined) {
-                    RealTime = dbMatchByBookmaker.RealTime;
-                }
+            if (dbMatchByBookmaker !== undefined && dbMatchByBookmaker.RealTime !== undefined) {
+                match.RealTime = dbMatchByBookmaker.RealTime;
+            }
 
-                if (Result === null && dbMatchByBookmaker.Result !== undefined) {
-                    Result = dbMatchByBookmaker.Result;
-                }
+            if (dbMatchByBookmaker !== undefined && dbMatchByBookmaker.Result !== undefined) {
+                match.Result = dbMatchByBookmaker.Result;
+            }
 
-                const child = BookmakerQuote.createFromDb(dbMatchByBookmaker);
-                if (child !== null) {
-                    children.push(child);
+            for (const bookmakerName in dbMatch) {
+                if (dbMatch.hasOwnProperty(bookmakerName)) {
+                    let dbMatchByBookmaker = dbMatch[bookmakerName];
+
+                    const child = BookmakerInfo.createFromDb(dbMatchByBookmaker);
+                    if (child !== null) {
+                        match.children.push(child);
+                    }
                 }
             }
-        }
 
-        if (Name !== null && children.length > 0) {
-            match = new Match(Name, Team1, Team2, StartDate, StartTime, RealTime, Result, children);
+            // If there is no name or no child it is an invalid match
+            if (match.Name === null || match.children.length === 0) {
+                match = null;
+            }
         }
 
         return match;

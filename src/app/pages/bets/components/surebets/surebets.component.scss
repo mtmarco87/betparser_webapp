@@ -7,3 +7,17 @@
     overflow-x: auto;
     overflow-y: auto;
 }
+
+.transparent {
+    opacity: 0.4;
+}
+
+.quote-values-table {
+    margin: auto;
+}
+
+.quote-values-table-cell {
+    border: none;
+    padding: 0.5rem;
+    text-align: left;
+}

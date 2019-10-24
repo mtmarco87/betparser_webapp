@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { MatchGroup } from '../../models/MatchGroup';
+import { QuoteGroupType } from '../../models/QuoteGroupType';
 import { BetsFacade } from '../../bets.facade';
 
 
@@ -9,11 +10,12 @@ import { BetsFacade } from '../../bets.facade';
   styleUrls: ['./bets-analysis.component.scss']
 })
 export class BetsAnalysisComponent implements OnInit {
-  matchGroupsByDate: MatchGroup[];
+  quoteGroupTypes: QuoteGroupType[] = QuoteGroupType.defaultTypes;
+  matchGroups: MatchGroup[];
 
   constructor(private betsFacade: BetsFacade) { }
 
   ngOnInit() {
-    this.betsFacade.getMatchGroups().subscribe((newMatchGroups) => this.matchGroupsByDate = newMatchGroups);
+    this.betsFacade.getMatchGroups().subscribe((newMatchGroups) => this.matchGroups = newMatchGroups);
   }
 }

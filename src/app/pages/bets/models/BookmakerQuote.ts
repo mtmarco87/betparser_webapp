@@ -1,45 +1,29 @@
+import { QuoteType } from './QuoteType';
+
 export class BookmakerQuote {
-    Bookmaker: string;
-    Quote1: number;
-    QuoteX: number;
-    Quote2: number;
+    Name: string;
+    Value: number;
+    isAvailable: boolean;
 
-    constructor(Bookmaker: string, Quote1: number, QuoteX: number, Quote2: number) {
-        this.Bookmaker = Bookmaker;
-        this.Quote1 = Quote1;
-        this.QuoteX = QuoteX;
-        this.Quote2 = Quote2;
+    constructor(Name: string, Value: number, isAvailable: boolean = true) {
+        this.Name = Name;
+        this.Value = Value;
+        this.isAvailable = isAvailable;
     }
 
-    public static createFromDb(dbMatchByBookmaker: any): BookmakerQuote {
-        let bookmakerQuote: BookmakerQuote = null;
-
-        try {
-            const Quote1 = parseFloat(dbMatchByBookmaker.Quote1);
-            const QuoteX = parseFloat(dbMatchByBookmaker.QuoteX);
-            const Quote2 = parseFloat(dbMatchByBookmaker.Quote2);
-            if (!isNaN(Quote1) && !isNaN(QuoteX) && !isNaN(Quote2)) {
-                bookmakerQuote = new BookmakerQuote(dbMatchByBookmaker.Bookmaker, Quote1, QuoteX, Quote2);
-            }
-        } catch (error) {
-            console.error("Error extracting a single Bookmaker Quote array: " + error);
+    public static safeCreate(quoteType: string, Value: number): BookmakerQuote {
+        if (!QuoteType.isValid(quoteType)) {
+            return null;
         }
 
-        return bookmakerQuote;
-    }
-
-    public static createManyFromDb(dbMatch: any): BookmakerQuote[] {
-        const bookmakerQuotes: BookmakerQuote[] = [];
-
-        for (const bookmakerName in dbMatch) {
-            if (dbMatch.hasOwnProperty(bookmakerName)) {
-                const bookmakerQuote = BookmakerQuote.createFromDb(dbMatch[bookmakerName]);
-                if (bookmakerQuote !== null) {
-                    bookmakerQuotes.push(bookmakerQuote);
-                }
-            }
+        let quote: BookmakerQuote = null;
+        if(Value === undefined || Value === null || isNaN(Value)){
+            quote = new BookmakerQuote(quoteType, -1, false);
+        }
+        else{
+            quote = new BookmakerQuote(quoteType, Value);
         }
 
-        return bookmakerQuotes;
+        return quote;
     }
 }

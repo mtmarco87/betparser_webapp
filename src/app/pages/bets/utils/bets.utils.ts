@@ -40,4 +40,15 @@ export class BetsUtils {
     public static getMatchFullName(team1: string, team2: string): string {
         return team1 + BetsUtils.MatchNameDivider + team2;
     }
+
+    public static safeParseFloat(value: string): number {
+        let floatValue: number = null;
+        try {
+            floatValue = parseFloat(value);
+        } catch (error) {
+            console.error("Error extracting a Quote Float value: " + error);
+        }
+
+        return floatValue;
+    }
 }
