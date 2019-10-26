@@ -1,8 +1,8 @@
 import { NgModule } from "@angular/core";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 
+import { SharedModule } from 'app/shared/shared.module';
 import { AdminLayoutRoutes } from "./admin-layout.routing";
 import { AdminLayoutComponent } from './admin-layout.component';
 import { CoreModule } from 'app/core/core.module';
@@ -19,7 +19,6 @@ import { BetsModule } from 'app/pages/bets/bets.module';
 @NgModule({
   imports: [
     NgbModule,
-    CommonModule,
     RouterModule.forChild(AdminLayoutRoutes),
     CoreModule,
     DashboardModule,
@@ -29,7 +28,8 @@ import { BetsModule } from 'app/pages/bets/bets.module';
     NotificationsModule,
     TablesModule,
     TypographyModule,
-    UserModule
+    UserModule,
+    SharedModule
   ],
   declarations: [
     AdminLayoutComponent

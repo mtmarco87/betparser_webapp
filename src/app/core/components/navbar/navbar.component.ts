@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, OnDestroy } from "@angular/core";
+import { Component, OnInit, ElementRef, OnDestroy, Input } from "@angular/core";
 import { ROUTES } from "../sidebar/sidebar.component";
 import { Location } from "@angular/common";
 import { Router, NavigationEnd } from "@angular/router";
@@ -9,9 +9,12 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: "app-navbar",
   templateUrl: "./navbar.component.html",
-  styleUrls: ["./navbar.component.css"]
+  styleUrls: ["./navbar.component.scss"]
 })
 export class NavbarComponent implements OnInit, OnDestroy {
+  @Input() showMenuToggler: boolean = true;
+  @Input() showSideBarToggler: boolean = true;
+
   private listTitles: any[];
   location: Location;
   mobile_menu_visible: any = 0;
@@ -37,22 +40,24 @@ export class NavbarComponent implements OnInit, OnDestroy {
       navbar.classList.remove('bg-white');
       navbar.classList.add('navbar-transparent');
     }
+
+    var title = navbar.getElementsByClassName('navbar-brand')[0];
+    if (title && window.innerWidth < 993) {
+      setTimeout(() => { title.classList.remove('glow'); }, 300);
+    }
+    else if (title) {
+      title.classList.add('glow');
+    }
   };
 
   ngOnInit() {
-    window.addEventListener("resize", this.updateColor);
+    this.updateColor();
+    window.addEventListener("resize", this.updateColor.bind(this));
     this.listTitles = ROUTES.filter(listTitle => listTitle);
-    const navbar: HTMLElement = this.element.nativeElement;
-    this.toggleButton = navbar.getElementsByClassName("navbar-toggler")[0];
-    if(this.isHome()){
-      this.toggleButton.classList.add("hidden");
-      const titleLabel = navbar.getElementsByClassName("navbar-brand")[0];
-      titleLabel.classList.add("left");
-    }
 
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
-      ).subscribe(event => {
+    ).subscribe(event => {
       this.sidebarClose();
       var $layer: any = document.getElementsByClassName("close-layer")[0];
       if ($layer) {
@@ -62,41 +67,51 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit() {
+    const navbar: HTMLElement = this.element.nativeElement;
+    this.toggleButton = navbar.getElementsByClassName("navbar-toggler")[0];
+  }
+
+  // Show/Hide NavBar (only visible on small screens)
   collapse() {
     this.isCollapsed = !this.isCollapsed;
     const navbar = document.getElementsByTagName("nav")[0];
+    const glassPanel = document.getElementsByClassName("glass-panel")[0];
+    const title = document.getElementsByClassName("navbar-brand")[0];
     if (!this.isCollapsed) {
       navbar.classList.remove("navbar-transparent");
       navbar.classList.add("bg-white");
+      glassPanel.classList.add("hidden");
+      title.classList.remove("glowOnHover");
     } else {
       navbar.classList.add("navbar-transparent");
       navbar.classList.remove("bg-white");
+      glassPanel.classList.remove("hidden");
+      title.classList.add("glowOnHover");
     }
   }
 
   sidebarOpen() {
-    const toggleButton = this.toggleButton;
     const mainPanel = <HTMLElement>(
       document.getElementsByClassName("main-panel")[0]
     );
-    const html = document.getElementsByTagName("html")[0];
     if (window.innerWidth < 991) {
       mainPanel.style.position = "fixed";
     }
 
     setTimeout(function () {
-      toggleButton.classList.add("toggled");
-    }, 500);
+      if (this.toggleButton) {
+        this.toggleButton.classList.add("toggled");
+      }
+    }.bind(this), 500);
 
+    const html = document.getElementsByTagName("html")[0];
     html.classList.add("nav-open");
 
     this.sidebarVisible = true;
   }
 
   sidebarClose() {
-    // Revert Sidebar toggle button icon
-    this.toggleButton.classList.remove("toggled");
-    
     // Reposition Main Panel
     const mainPanel = <HTMLElement>(
       document.getElementsByClassName("main-panel")[0]
@@ -107,43 +122,46 @@ export class NavbarComponent implements OnInit, OnDestroy {
       }, 500);
     }
 
-    // Update Sidebar Visibility status
-    this.sidebarVisible = false;
+    // Revert Sidebar toggle button icon
+    if (this.toggleButton) {
+      this.toggleButton.classList.remove("toggled");
+    }
 
     // Make the Sidebar disappear (if navigating on small width)
     const html = document.getElementsByTagName("html")[0];
     html.classList.remove("nav-open");
+
+    // Update Sidebar Visibility status
+    this.sidebarVisible = false;
   }
 
+  // Show/Hide SideBar (only for small screens)
   sidebarToggle() {
-    // const toggleButton = this.toggleButton;
-    // const html = document.getElementsByTagName('html')[0];
-    var $toggle = document.getElementsByClassName("navbar-toggler")[0];
-
     if (this.sidebarVisible === false) {
       this.sidebarOpen();
     } else {
       this.sidebarClose();
     }
-    const html = document.getElementsByTagName("html")[0];
 
+    const html = document.getElementsByTagName("html")[0];
+    var $layer: any = null;
     if (this.mobile_menu_visible == 1) {
-      // $('html').removeClass('nav-open');
       html.classList.remove("nav-open");
+      $layer = document.getElementsByClassName("close-layer")[0];
       if ($layer) {
         $layer.remove();
       }
       setTimeout(function () {
-        $toggle.classList.remove("toggled");
-      }, 400);
+        this.toggleButton.classList.remove("toggled");
+      }.bind(this), 400);
 
       this.mobile_menu_visible = 0;
     } else {
       setTimeout(function () {
-        $toggle.classList.add("toggled");
-      }, 430);
+        this.toggleButton.classList.add("toggled");
+      }.bind(this), 430);
 
-      var $layer = document.createElement("div");
+      $layer = document.createElement("div");
       $layer.setAttribute("class", "close-layer");
 
       if (html.querySelectorAll(".main-panel")) {
@@ -165,12 +183,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
         $layer.classList.remove("visible");
         setTimeout(function () {
           $layer.remove();
-          $toggle.classList.remove("toggled");
-        }, 400);
+          this.toggleButton.classList.remove("toggled");
+        }.bind(this), 400);
       }.bind(this);
 
       html.classList.add("nav-open");
       this.mobile_menu_visible = 1;
+    }
+
+    // Close also the NavBar menu if open 
+    if (!this.isCollapsed) {
+      this.collapse();
     }
   }
 
@@ -210,6 +233,16 @@ export class NavbarComponent implements OnInit, OnDestroy {
       return 'by clicking on a backdrop';
     } else {
       return `with: ${reason}`;
+    }
+  }
+
+  onClickOutside() {
+    if (!this.isCollapsed) {
+      this.collapse();
+    }
+
+    if (this.sidebarVisible && this.mobile_menu_visible) {
+      this.sidebarToggle();
     }
   }
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { CoreState } from 'app/core/state/core.state.ts';
 
 
 @Component({
@@ -7,33 +8,17 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./admin-layout.component.scss"]
 })
 export class AdminLayoutComponent implements OnInit {
-  public sidebarColor: string = "red";
+  isAppLoading = false;
 
-  constructor() { }
-
-  changeSidebarColor(color) {
-    var sidebar = document.getElementsByClassName('sidebar')[0];
-    var mainPanel = document.getElementsByClassName('main-panel')[0];
-
-    this.sidebarColor = color;
-
-    if (sidebar != undefined) {
-      sidebar.setAttribute('data', color);
-    }
-    if (mainPanel != undefined) {
-      mainPanel.setAttribute('data', color);
-    }
-  }
-
-  changeDashboardColor(color) {
-    var body = document.getElementsByTagName('body')[0];
-    if (body && color === 'white-content') {
-      body.classList.add(color);
-    }
-    else if (body.classList.contains('white-content')) {
-      body.classList.remove('white-content');
-    }
+  constructor(private coreState: CoreState) {
+    // Subscribe App loading status to spinner component
+    this.coreState.getIsAppLoading().subscribe((isAppLoading) => this.isAppLoading = isAppLoading);
   }
 
   ngOnInit() { }
+
+  scrollHandler(scrollStatus: string) {
+    // should log top or bottom
+    this.coreState.setScrollStatus(scrollStatus);
+  }
 }

@@ -10,7 +10,7 @@ export class BetsUtils {
         let date = null;
 
         const dateParts = matchDateStr.split(BetsUtils.DateDivider);
-        if (dateParts.length === 3) {
+        if (dateParts.length >= 3) {
             try {
                 const year: number = parseInt(dateParts[0], 10);
                 const month: number = parseInt(dateParts[1], 10) - 1;

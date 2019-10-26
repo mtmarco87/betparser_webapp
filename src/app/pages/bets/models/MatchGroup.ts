@@ -1,5 +1,8 @@
 import { Match } from './Match';
 import { BetsUtils } from '../utils/bets.utils';
+import { from } from 'rxjs';
+import { mergeMap, groupBy, reduce, map } from 'rxjs/operators';
+
 
 export class MatchGroup {
     Date: string;
@@ -10,30 +13,18 @@ export class MatchGroup {
         this.children = children;
     }
 
-    public static createFromDb(dbMatchGroup: any): MatchGroup {
-        let matchGroup: MatchGroup = null;
-
-        const date = BetsUtils.getDateString(BetsUtils.getMatchDate(dbMatchGroup.key));
-        if (date !== null) {
-            const dbMatches = dbMatchGroup.payload.val();
-            const children = Match.createManyFromDb(dbMatches);
-
-            matchGroup = new MatchGroup(date, children);
-        }
-
-        return matchGroup;
-    }
-
-    public static createManyFromDb(dbMatchGroups: any[]): MatchGroup[] {
+    public static createManyFromDb(dbMatchesWithDate: any[]): MatchGroup[] {
         const matchGroups: MatchGroup[] = [];
 
-        dbMatchGroups.forEach(dbMatchGroup => {
-            const matchGroup = MatchGroup.createFromDb(dbMatchGroup);
-            if (matchGroup !== null) {
-                matchGroups.push(matchGroup);
-            }
-        });
-
+        const matches = Match.createManyFromDb(dbMatchesWithDate);
+        from(matches).pipe(
+            groupBy(match => match.StartDate),
+            mergeMap((group$) => group$.pipe(reduce((acc, cur) => [...acc, cur], [`${group$.key}`]))),
+            map(arr => new MatchGroup(arr[0] as string, arr.slice(1) as Match[]))
+        ).forEach(
+            (matchGroup) => matchGroups.push(matchGroup)
+        );
+        
         return matchGroups;
     }
 }

@@ -40,7 +40,7 @@ export class BookmakerInfo {
         let quoteValue = BetsUtils.NotAvailable;
 
         if (quote !== null && quote.isAvailable) {
-            quoteValue = quote.Value.toString();
+            quoteValue = quote.Value.toFixed(2);
         }
 
         return quoteValue;

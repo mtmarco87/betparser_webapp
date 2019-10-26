@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { filter, map } from 'rxjs/operators';
-import { BetsState } from './state/bets.state';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { map } from 'rxjs/operators';
+import { CoreState } from 'app/core/state/core.state.ts';
+import { MatchPaginationService } from 'app/core/api/match-pagination/match-pagination.service';
 import { MatchGroup } from './models/MatchGroup';
 import { SureBet } from './models/SureBet';
 
@@ -11,45 +11,43 @@ import { SureBet } from './models/SureBet';
     providedIn: 'root'
 })
 export class BetsFacade {
-    readonly dbRoot = '/parsed_bets';
-    initialized: boolean = false;
 
-    constructor(private betsState: BetsState, private firebaseDb: AngularFireDatabase) { }
+    constructor(private coreState: CoreState, private api: MatchPaginationService) { }
 
-    initializeDbConnection() {
-        if (!this.initialized) {
-            this.firebaseDb.list(this.dbRoot).snapshotChanges().pipe(
-                map(dbItems => {
-                    return MatchGroup.createManyFromDb(dbItems);
-                })).subscribe(
-                    (matchGroups) => {
-                        this.betsState.setMatchGroups(this.sortMatchGroups(matchGroups));
-                        this.betsState.setSureBets(this.extractSureBets(matchGroups));
-                        // console.log("New MatchGroups: ", matchGroups);
-                    }
-                );
-        } else {
-            console.warn("FirebaseDB already initialized!");
-        }
+    // Function to ask the core service the scroll status
+    getScrollStatus(): Observable<string> {
+        return this.coreState.getScrollStatus();
     }
 
+    // Function to ask the service to paginate some more Matches
+    requestMoreMatchGroups() {
+        this.api.more();
+    }
+
+    // Function to get the retrieved Matches (until now)
     getMatchGroups(): Observable<MatchGroup[]> {
-        // Just pass-through the State value
-        return this.betsState.getMatchGroups();
-    }
-
-    getSureBets(): Observable<SureBet[]> {
-        // Just pass-through the State value
-        return this.betsState.getSureBets();
+        // Just pass-through the API State value
+        return this.api.data.pipe(
+            map(dbItems => {
+                return this.sortMatchGroups(MatchGroup.createManyFromDb(dbItems));
+            }));
     }
 
     sortMatchGroups(matchGroups: MatchGroup[]): MatchGroup[] {
-        // We sort each MatchGroup descending for number of available bookmaker quotes
+        // Here we sort the Matches in MatchGroup, by descending number of available bookmaker quotes
         matchGroups.forEach(matchGroup => {
             matchGroup.children.sort((a, b) => b.children.length - a.children.length)
         });
 
         return matchGroups;
+    }
+
+    // Function to get all the Sure Bets found (if any)
+    getSureBets(): Observable<SureBet[]> {
+        // Just pass-through the API State value
+        return this.api.allData.pipe(map(dbItems => {
+            return this.extractSureBets(MatchGroup.createManyFromDb(dbItems));
+        }));
     }
 
     extractSureBets(matchGroups: MatchGroup[]): SureBet[] {

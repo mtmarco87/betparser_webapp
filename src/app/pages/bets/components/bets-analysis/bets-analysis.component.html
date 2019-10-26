@@ -72,7 +72,8 @@
               class="category table-footer">
                 <b>{{ quoteGroupType.Name }}:</b>
                 <span>
-                  => {{ match.getOddsInverseSum(quoteGroupType) }} ({{ match.getMarginPercentage(quoteGroupType) + '%' }})
+                  => {{ match.getOddsInverseSum(quoteGroupType) | filter_na }} 
+                  ({{ match.getMarginPercentage(quoteGroupType) | filter_na | add_percent }})
                 </span>
               </p>
             </div>

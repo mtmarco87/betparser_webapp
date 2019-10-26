@@ -2,3 +2,7 @@
     top: -1px;
     position: relative;
 }
+
+.nav li > a {
+    font-size: 0.75475rem;
+}

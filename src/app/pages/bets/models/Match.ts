@@ -45,7 +45,7 @@ export class Match {
         const cacheKey = quoteGroupType.Name + '-' + quoteType;
         const cachedMaxQuote = this.cachedMaxQuotes.find(x => x.key === cacheKey);
         if (cachedMaxQuote === undefined || cachedMaxQuote === null) {
-            maxQuote = { key: [], value: 0 };
+            maxQuote = { key: [], value: null };
 
             this.children.forEach(bmInfo => {
                 const quote = bmInfo.getQuote(quoteGroupType, quoteType);
@@ -73,7 +73,11 @@ export class Match {
         try {
             for (let i = 0; i < quoteGroupType.subTypes.length; i++) {
                 const quoteType = quoteGroupType.subTypes[i];
-                oddsInverseSum += (1 / this.getMaxQuote(quoteGroupType, quoteType).value);
+                const maxQuoteOfType = this.getMaxQuote(quoteGroupType, quoteType).value;
+                if (maxQuoteOfType === null) {
+                    return null;
+                }
+                oddsInverseSum += (1 / maxQuoteOfType);
             }
             oddsInverseSum = Math.round(oddsInverseSum * 100) / 100;
         } catch (error) {
@@ -185,17 +189,15 @@ export class Match {
         return match;
     }
 
-    public static createManyFromDb(dbMatches: any): Match[] {
+    public static createManyFromDb(dbMatchesWithDate: any[]): Match[] {
         let matches: Match[] = [];
 
-        for (const matchName in dbMatches) {
-            if (dbMatches.hasOwnProperty(matchName)) {
-                const match = Match.createFromDb(dbMatches[matchName]);
-                if (match !== null) {
-                    matches.push(match);
-                }
+        dbMatchesWithDate.forEach(dbMatch => {
+            const match = Match.createFromDb(dbMatch.payload.val());
+            if (match !== null) {
+                matches.push(match);
             }
-        }
+        });
 
         return matches;
     }

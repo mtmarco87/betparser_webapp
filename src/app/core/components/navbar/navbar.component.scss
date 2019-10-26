@@ -1,0 +1,40 @@
+.hidden {
+    display: none !important;
+}
+
+.left {
+    position: fixed;
+    margin-left: 17px;
+    margin-top: 26px;
+}
+
+.navbar {
+    position: fixed;
+    width: calc(100vw - 34px);
+}
+
+.navbar.bg-white {
+    width: calc(100vw);
+}
+
+.glass-panel{
+    opacity: 0.5;
+    height: 76px;
+    width: calc(100vw - 32px);
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+    position: fixed;
+    top: 3px;
+}
+
+.navbar-toggle, .navbar-toggler, .navbar-menu {
+    z-index: 9999;
+}
+
+.navbar-menu {
+    position: absolute;
+    left: calc(88vw);
+    top: calc(2vh);
+}

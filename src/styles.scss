@@ -1,1 +1,176 @@
-/* You can add global styles to this file, and also import other style files */
+/* Custom body styling according with Dashboard Background (navbar, custom tables) */
+:not(.white-content) .glass-panel {
+    background: #1e1e2f;
+}
+
+.white-content .glass-panel {
+    background: #f5f6fa;
+}
+
+:not(.white-content) .not-available {
+    opacity: 0.2;
+}
+
+.white-content .not-available {
+    opacity: 0.4;
+}
+
+.main-panel .content {
+    min-height: calc(100vh - 71px) !important;
+}
+
+.unselectable {
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
+.spinner {
+  &:not([data]){
+    background-color: #fd5d93;
+  }
+
+  &[data="red"]{
+    background-color: #fd5d93;
+  }
+
+  &[data="blue"]{
+    background-color: #1d8cf8;
+  }
+
+  &[data="green"]{
+    background-color: #00f2c3;
+  }
+
+  &[data="primary"]{
+    background-color: #e14eca;
+  }
+}
+
+/* Custom Scrollbar */
+.wrapper, .scrollable-container {
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.table-responsive {
+  overflow: auto;
+  -ms-overflow-style: auto !important;
+}
+
+:not(.white-content) :not(.card-plain) .table-responsive > * {
+  background: #27293d;
+}
+
+.white-content :not(.card-plain) .table-responsive > * {
+  background: #ffffff;
+}
+
+:not(.white-content) .card-plain .table-responsive > * {
+  background: #1e1e2f20;
+}
+
+.white-content .card-plain .table-responsive > * {
+  background: #f5f6fa;
+}
+
+/* trick to only apply in webkit */
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+    .wrapper, .table-responsive {
+        background-color: rgba(0,0,0,0);
+        -webkit-background-clip: text;
+        background-clip: text;
+        /* uncomment following line to see the trick in actions */
+        /* -webkit-text-fill-color: transparent; */
+        /* @include transition(background-color .8s ease); */
+        transition: background-color .8s ease, !important;
+    }
+    .wrapper:hover {
+      &:not([data]){
+        background-color: #fd5d93;
+      }
+
+      &[data="red"]{
+        background-color: #fd5d93;
+      }
+
+      &[data="blue"]{
+        background-color: #1d8cf8;
+      }
+  
+      &[data="green"]{
+        background-color: #00f2c3;
+      }
+  
+      &[data="primary"]{
+        background-color: #e14eca;
+      }
+    }
+
+    .table-responsive:hover {
+      background-color: rgba(0,0,0,0.3);
+    }
+
+    .wrapper::-webkit-scrollbar, .table-responsive::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    .wrapper::-webkit-scrollbar-track, .table-responsive::-webkit-scrollbar-track {
+        display: none;
+    }
+    .wrapper::-webkit-scrollbar-thumb, .table-responsive::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-color: inherit;
+    }
+  }
+
+
+  /* Animations */
+  .glow, .glowOnHover:hover, .glow:active, .glowOnHover:active {
+    color: #fff;
+    text-align: center;
+    -webkit-animation: glow 1s ease-in-out infinite alternate; // before was cubic-bezier(0.755, 0.05, 0.855, 0.06)
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow 1s ease-in-out infinite alternate;
+  }
+  
+  @keyframes glow {
+    from {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+    }
+    to {
+      text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+    }
+  }
+
+  @-webkit-keyframes glow {
+    from {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+    }
+    to {
+      text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+    }
+  }
+
+  .highlightOnHover:hover, .highlightOnHover:active {
+    opacity: 0.4;
+    transition: opacity 0.6s ease;
+  }
+
+  .highlightAndBoxOnHover:hover, .highlightAndBoxOnHover:active {
+    opacity: 1;
+    transition: all 0.6s ease !important;
+  }
+
+  .highlightAndBoxOnHover:hover::after, .highlightAndBoxOnHover:active::after {
+    width: 90%;
+    height: 44px;
+    position: absolute;
+    top: 4px;
+    background: rgb(0,0,0,0.3);
+    border-radius: 3px;
+    z-index: -1;
+    content: " ";
+  }

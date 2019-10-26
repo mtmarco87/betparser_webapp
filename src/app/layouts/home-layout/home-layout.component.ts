@@ -11,7 +11,7 @@ export class HomeLayoutComponent implements OnInit {
   constructor(private element: ElementRef) { }
 
   ngOnInit() {
-    // Disable animations/transitions until the page has loaded.
+    // Disable animations/transitions until the page has loaded (and then the css animations can start).
     const homePage: HTMLElement = this.element.nativeElement;
     const banner = homePage.getElementsByTagName('section')[0]
     banner.classList.add('is-loading');
@@ -19,15 +19,5 @@ export class HomeLayoutComponent implements OnInit {
     window.setTimeout(function () {
       banner.classList.remove('is-loading');
     }, 100);
-  }
-
-  changeDashboardColor(color) {
-    var body = document.getElementsByTagName('body')[0];
-    if (body && color === 'white-content') {
-      body.classList.add(color);
-    }
-    else if (body.classList.contains('white-content')) {
-      body.classList.remove('white-content');
-    }
   }
 }
