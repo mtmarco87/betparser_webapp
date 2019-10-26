@@ -1,6 +1,8 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 import { map } from 'rxjs/operators';
+import { UserSettings } from '../models/UserSettings';
+import { LocalStorageService } from '../api/local-storage/local-storage.service';
 
 
 @Injectable({
@@ -11,6 +13,9 @@ export class CoreState {
     public static scrolledTop: string = 'top';
     public static scrolledBottom: string = 'bottom';
     private loadingStack$ = new BehaviorSubject<number>(0);
+    private userSettings$ = new BehaviorSubject<UserSettings>(null);
+
+    constructor(private cache: LocalStorageService) { }
 
     getScrollStatus(): Observable<string> {
         return this.scrollStatus$.asObservable();
@@ -20,7 +25,7 @@ export class CoreState {
         this.scrollStatus$.next(scrollStatus);
     }
 
-    getIsAppLoading() {
+    getIsAppLoading(): Observable<boolean> {
         return this.loadingStack$.pipe(map(loadingStack => {
             return loadingStack > 0;
         }));
@@ -36,5 +41,23 @@ export class CoreState {
         }
 
         this.loadingStack$.next(loadingStack);
+    }
+
+    getUserSettings(): Observable<UserSettings> {
+        if (this.userSettings$.value === null) {
+            const cachedUserSettings = this.cache.getCachedUserSettings();
+            if (cachedUserSettings === undefined || cachedUserSettings === null) {
+                this.userSettings$.next(UserSettings.default);
+            }
+            else {
+                this.userSettings$.next(cachedUserSettings);
+            }
+        }
+        return this.userSettings$.asObservable();
+    }
+
+    setUserSettings(userSettings: UserSettings) {
+        this.cache.cacheUserSettings(userSettings);
+        this.userSettings$.next(userSettings);
     }
 }

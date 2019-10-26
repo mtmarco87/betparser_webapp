@@ -43,7 +43,7 @@
                         </tr>
                         <ng-container *ngFor="let quoteType of quoteGroupType.subTypes">
                             <tr>
-                                <td class="text-center"><b>{{ quoteType }}</b></td>
+                                <td class="text-center"><b>{{ quoteType.Name }}</b></td>
                                 <td *ngFor="let bmInfo of match.children" class="text-center"> 
                                   <span *ngIf="bmInfo.getQuote(quoteGroupType, quoteType); let quote" 
                                   [ngClass]="[!quote.isAvailable ? 'not-available' : '', (quote.isAvailable && 

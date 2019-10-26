@@ -11,17 +11,17 @@ export class BookmakerQuote {
         this.isAvailable = isAvailable;
     }
 
-    public static safeCreate(quoteType: string, Value: number): BookmakerQuote {
+    public static safeCreate(quoteType: QuoteType, Value: number): BookmakerQuote {
         if (!QuoteType.isValid(quoteType)) {
             return null;
         }
 
         let quote: BookmakerQuote = null;
         if(Value === undefined || Value === null || isNaN(Value)){
-            quote = new BookmakerQuote(quoteType, -1, false);
+            quote = new BookmakerQuote(quoteType.Name, -1, false);
         }
         else{
-            quote = new BookmakerQuote(quoteType, Value);
+            quote = new BookmakerQuote(quoteType.Name, Value);
         }
 
         return quote;

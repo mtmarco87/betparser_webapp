@@ -1,5 +1,4 @@
 import { Match } from './Match';
-import { BetsUtils } from '../utils/bets.utils';
 import { from } from 'rxjs';
 import { mergeMap, groupBy, reduce, map } from 'rxjs/operators';
 
@@ -16,7 +15,10 @@ export class MatchGroup {
     public static createManyFromDb(dbMatchesWithDate: any[]): MatchGroup[] {
         const matchGroups: MatchGroup[] = [];
 
+        // Extract match first
         const matches = Match.createManyFromDb(dbMatchesWithDate);
+
+        // Then group by StartDate and create MatchGroups
         from(matches).pipe(
             groupBy(match => match.StartDate),
             mergeMap((group$) => group$.pipe(reduce((acc, cur) => [...acc, cur], [`${group$.key}`]))),

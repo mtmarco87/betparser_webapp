@@ -1,8 +1,10 @@
 import { BookmakerInfo as BookmakerInfo } from './BookmakerInfo';
 import { BetsUtils } from '../utils/bets.utils';
 import { QuoteGroupType } from './QuoteGroupType';
+import { QuoteType } from './QuoteType';
 import { KeyValue } from '@angular/common';
 import { SureBet } from './SureBet';
+import { BookmakerEnum } from './Bookmaker.enum';
 
 
 export class Match {
@@ -16,7 +18,7 @@ export class Match {
     children: BookmakerInfo[];
 
     // Cache objects
-    cachedMaxQuotes: KeyValue<string, KeyValue<string[], number>>[] = [];
+    private cachedMaxQuotes: KeyValue<string, KeyValue<string[], number>>[] = [];
 
     constructor(Name: string = null, Team1: string = null, Team2: string = null, StartDate: string = null, StartTime: string = null,
         RealTime: string = null, Result: string = null, children: BookmakerInfo[] = []) {
@@ -39,17 +41,20 @@ export class Match {
             this.Result !== null && this.Result !== BetsUtils.NotAvailable;
     }
 
-    public getMaxQuote(quoteGroupType: QuoteGroupType, quoteType: string): KeyValue<string[], number> {
+    public getMaxQuote(quoteGroupType: QuoteGroupType, quoteType: QuoteType): KeyValue<string[], number> {
         let maxQuote: KeyValue<string[], number> = null;
 
-        const cacheKey = quoteGroupType.Name + '-' + quoteType;
+        const cacheKey = quoteGroupType.Name + '-' + quoteType.Name;
         const cachedMaxQuote = this.cachedMaxQuotes.find(x => x.key === cacheKey);
         if (cachedMaxQuote === undefined || cachedMaxQuote === null) {
             maxQuote = { key: [], value: null };
 
             this.children.forEach(bmInfo => {
                 const quote = bmInfo.getQuote(quoteGroupType, quoteType);
-                if (quote.isAvailable && quote.Value > maxQuote.value) {
+                if (quote === null) {
+                    return;
+                }
+                else if (quote.isAvailable && quote.Value > maxQuote.value) {
                     maxQuote.value = quote.Value;
                     maxQuote.key = [bmInfo.Bookmaker];
                 }
@@ -154,7 +159,7 @@ export class Match {
             }
 
             if (dbMatchByBookmaker !== undefined && dbMatchByBookmaker.StartDate !== undefined) {
-                match.StartDate = BetsUtils.getDateString(BetsUtils.getMatchDate(dbMatchByBookmaker.StartDate));
+                match.StartDate = BetsUtils.dateToString(BetsUtils.parseMatchDate(dbMatchByBookmaker.StartDate));
             }
 
             if (dbMatchByBookmaker !== undefined && dbMatchByBookmaker.StartTime !== undefined) {
@@ -169,16 +174,20 @@ export class Match {
                 match.Result = dbMatchByBookmaker.Result;
             }
 
-            for (const bookmakerName in dbMatch) {
+            Object.keys(BookmakerEnum).forEach((bookmakerName) => {
+                let child: BookmakerInfo = null;
                 if (dbMatch.hasOwnProperty(bookmakerName)) {
                     let dbMatchByBookmaker = dbMatch[bookmakerName];
-
-                    const child = BookmakerInfo.createFromDb(dbMatchByBookmaker);
-                    if (child !== null) {
-                        match.children.push(child);
-                    }
+                    child = BookmakerInfo.createFromDb(dbMatchByBookmaker);
                 }
-            }
+                else {
+                    child = BookmakerInfo.createEmpty(bookmakerName);
+                }
+
+                if (child !== null) {
+                    match.children.push(child);
+                }
+            });
 
             // If there is no name or no child it is an invalid match
             if (match.Name === null || match.children.length === 0) {

@@ -2,7 +2,7 @@ import { QuoteType } from './QuoteType';
 
 export class QuoteGroupType {
     Name: string;
-    subTypes: string[] = [];
+    subTypes: QuoteType[] = [];
 
     // Possible Quote Group Types
     static type1X2 = new QuoteGroupType('1 X 2', [QuoteType.type1, QuoteType.typeX, QuoteType.type2]);
@@ -26,7 +26,7 @@ export class QuoteGroupType {
         QuoteGroupType.typeUO45
     ];
 
-    constructor(Name: string, subTypes: string[]) {
+    constructor(Name: string, subTypes: QuoteType[]) {
         this.Name = Name;
         this.subTypes = subTypes;
     }

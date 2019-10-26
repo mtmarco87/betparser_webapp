@@ -32,7 +32,7 @@
                         <ng-container *ngFor="let quote of sureBet.Quotes; let j = index">
                           <tr>
                             <td class="quote-values-table-cell">
-                                <b>{{ sureBet.Type.subTypes[j] }}:</b> {{ quote.value }}
+                                <b>{{ sureBet.Type.subTypes[j].Name }}:</b> {{ quote.value }}
                             </td>
                             <td class="quote-values-table-cell">
                                 <span class="transparent">{{ ' [' + quote.key.join(', ') + ']' }}</span>

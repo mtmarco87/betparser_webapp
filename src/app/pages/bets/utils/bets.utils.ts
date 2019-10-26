@@ -1,4 +1,5 @@
 import { formatDate } from '@angular/common';
+import { BookmakerEnum } from '../models/Bookmaker.enum';
 
 export class BetsUtils {
     static readonly DateDivider = '_';
@@ -6,7 +7,7 @@ export class BetsUtils {
     static readonly MatchNameDivider = ' - ';
     static readonly NotAvailable = "N/A";
 
-    public static getMatchDate(matchDateStr: string): Date {
+    public static parseMatchDate(matchDateStr: string): Date {
         let date = null;
 
         const dateParts = matchDateStr.split(BetsUtils.DateDivider);
@@ -27,7 +28,7 @@ export class BetsUtils {
         return date;
     }
 
-    public static getDateString(date: Date) {
+    public static dateToString(date: Date) {
         let dateStr: string = "";
 
         if (date !== null) {
@@ -50,5 +51,14 @@ export class BetsUtils {
         }
 
         return floatValue;
+    }
+
+    public static getBookmakerFullName(bookmaker: string) {
+        const bmFullName = BookmakerEnum[bookmaker];
+        if (bmFullName) {
+            bookmaker = bmFullName;
+        }
+
+        return bookmaker;
     }
 }

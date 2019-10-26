@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from "@angular/core";
+import { CoreState } from 'app/core/state/core.state.ts';
+import { UserSettings } from 'app/core/models/UserSettings';
 
 
 @Component({
@@ -9,17 +11,31 @@ import { Component, OnInit, Input } from "@angular/core";
 export class FixedPluginComponent implements OnInit {
   @Input() canChangeSidebarColor: boolean = true;
   @Input() canChangeDashboardColor: boolean = true;
-  
-  
-  public sidebarColor: string = "red";
 
-  constructor() {
-  }
+  public sidebarColor: string = "red";
+  private userSettings: UserSettings;
+
+  constructor(private coreState: CoreState) { }
 
   ngOnInit() {
+    this.coreState.getUserSettings().subscribe((userSettings) => {
+      this.userSettings = userSettings;
+      this.applySidebarColor(userSettings.SidebarColor);
+      this.applyDashboardColor(userSettings.BackgroundColor);
+    });
   }
 
   changeSidebarColor(color) {
+    let userSettings = { ...this.userSettings, SidebarColor: color };
+    this.coreState.setUserSettings(userSettings);
+  }
+
+  changeDashboardColor(color) {
+    let userSettings = { ...this.userSettings, BackgroundColor: color };
+    this.coreState.setUserSettings(userSettings);
+  }
+
+  applySidebarColor(color) {
     const sidebar = document.getElementsByClassName('sidebar')[0];
     const mainPanel = document.getElementsByClassName('main-panel')[0];
     const wrapper = document.getElementsByClassName('wrapper')[0];
@@ -41,7 +57,7 @@ export class FixedPluginComponent implements OnInit {
     }
   }
 
-  changeDashboardColor(color) {
+  applyDashboardColor(color) {
     var body = document.getElementsByTagName('body')[0];
     if (body && color === 'white-content') {
       body.classList.add(color);
