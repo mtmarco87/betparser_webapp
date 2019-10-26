@@ -1,10 +1,12 @@
 /* Custom body styling according with Dashboard Background (navbar, custom tables) */
 :not(.white-content) .glass-panel {
     background: #1e1e2f;
+    opacity: 0.5;
 }
 
 .white-content .glass-panel {
     background: #f5f6fa;
+    opacity: 0.7;
 }
 
 :not(.white-content) .not-available {
