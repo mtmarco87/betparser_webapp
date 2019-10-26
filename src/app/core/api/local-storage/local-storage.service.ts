@@ -10,7 +10,13 @@ export class LocalStorageService {
   constructor() { }
 
   get(key: string): any {
-    return JSON.parse(localStorage.getItem(key));
+    try {
+      return JSON.parse(localStorage.getItem(key));
+    }
+    catch (ex) {
+      console.log("Error: Wrong user settings.")
+      return null;
+    }
   }
 
   set(key: string, value: any) {
