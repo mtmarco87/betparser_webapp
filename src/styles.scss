@@ -6,7 +6,7 @@
 
 .white-content .glass-panel {
     background: #f5f6fa;
-    opacity: 0.7;
+    opacity: 0.9;
 }
 
 :not(.white-content) .not-available {
@@ -18,7 +18,7 @@
 }
 
 .main-panel .content {
-    min-height: calc(100vh - 71px) !important;
+    min-height: calc(100vh - 82px) !important;
 }
 
 .unselectable {
@@ -130,7 +130,7 @@
 
 
   /* Animations */
-  .glow, .glowOnHover:hover, .glow:active, .glowOnHover:active {
+  .glow, .glowOnHover:hover, .show .glowOnShow {
     color: #fff;
     text-align: center;
     -webkit-animation: glow 1s ease-in-out infinite alternate; // before was cubic-bezier(0.755, 0.05, 0.855, 0.06)
@@ -156,17 +156,17 @@
     }
   }
 
-  .highlightOnHover:hover, .highlightOnHover:active {
+  .highlightOnHover:hover {
     opacity: 0.4;
     transition: opacity 0.6s ease;
   }
 
-  .highlightAndBoxOnHover:hover, .highlightAndBoxOnHover:active {
+  .highlightAndBoxOnHover:hover {
     opacity: 1;
     transition: all 0.6s ease !important;
   }
 
-  .highlightAndBoxOnHover:hover::after, .highlightAndBoxOnHover:active::after {
+  .highlightAndBoxOnHover:hover::after {
     width: 90%;
     height: 44px;
     position: absolute;

@@ -1,14 +1,7 @@
 import { Component, OnInit } from "@angular/core";
+import { RouteInfo } from 'app/core/models/RouteInfo';
 
-
-declare interface RouteInfo {
-  path: string;
-  title: string;
-  rtlTitle: string;
-  icon: string;
-  class: string;
-}
-export const ROUTES: RouteInfo[] = [
+export const Routes: RouteInfo[] = [
   {
     path: "/bets/analysis",
     title: "Analysis",
@@ -86,7 +79,7 @@ export class SidebarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.menuItems = ROUTES.filter(menuItem => menuItem);
+    this.menuItems = Routes.filter(menuItem => menuItem);
   }
 
   isMobileMenu() {
