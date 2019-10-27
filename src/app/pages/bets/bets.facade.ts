@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 import { CoreState } from 'app/core/state/core.state.ts';
 import { MatchPaginationService } from 'app/core/api/match-pagination/match-pagination.service';
 import { MatchGroup } from './models/MatchGroup';
@@ -14,9 +14,9 @@ export class BetsFacade {
 
     constructor(private coreState: CoreState, private api: MatchPaginationService) { }
 
-    // Function to ask the core service the scroll status
-    getScrollStatus(): Observable<string> {
-        return this.coreState.getScrollStatus();
+    // Function to get an observable on the scrolledBottom status (via core service)
+    getScrollBottomStatus(): Observable<string> {
+        return this.coreState.getScrollStatus().pipe(filter((scrollEvent) => scrollEvent === CoreState.scrolledBottom));
     }
 
     // Function to ask the service to paginate some more Matches
@@ -26,7 +26,7 @@ export class BetsFacade {
 
     // Function to get the retrieved Matches (until now)
     getMatchGroups(): Observable<MatchGroup[]> {
-        // Just pass-through the API State value
+        // Take the API paginated state value and transform it into Matches
         return this.api.data.pipe(
             map(dbItems => {
                 return this.sortMatchGroups(MatchGroup.createManyFromDb(dbItems));
@@ -44,7 +44,7 @@ export class BetsFacade {
 
     // Function to get all the Sure Bets found (if any)
     getSureBets(): Observable<SureBet[]> {
-        // Just pass-through the API State value
+        // Take the API all data state value and transform it into Sure Bets list
         return this.api.allData.pipe(map(dbItems => {
             return this.extractSureBets(MatchGroup.createManyFromDb(dbItems));
         }));
@@ -62,5 +62,13 @@ export class BetsFacade {
         sureBets.sort((a, b) => a.OddsInverseSum - b.OddsInverseSum);
 
         return sureBets;
+    }
+
+    getTotalMatches(): Observable<number> {
+        return this.api.allData.pipe(map(dbItems => { return dbItems.length; }));
+    }
+
+    setInfoBarStatus(status: string) {
+        this.coreState.setInfobarStatus(status);
     }
 }

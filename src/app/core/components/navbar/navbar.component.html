@@ -14,7 +14,7 @@
       <span [ngClass]="[!showSideBarToggler ? 'left':'', !reducedViewport ? 'glow':'', menuCollapsed ? 'glowOnHover':'']" 
       class=" navbar-brand"> {{ getTitle() }} </span>
     </div>
-    <div class="infobar"></div>
+    <span class="infobar">{{ infobarStatus }}</span>
     <button *ngIf="showMenuToggler"
       aria-label="Toggle navigation"
       class=" navbar-toggler navbar-menu"

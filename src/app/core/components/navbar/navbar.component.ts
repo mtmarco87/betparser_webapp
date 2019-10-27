@@ -7,6 +7,7 @@ import { Location } from "@angular/common";
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AppSettings } from 'app/core/models/AppSettings';
 import { Subscription } from 'rxjs';
+import { CoreState } from 'app/core/state/core.state.ts';
 
 
 @Component({
@@ -21,11 +22,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   reducedViewport: boolean = false;
   menuCollapsed: boolean = true;
   closeResult: string;
+  infobarStatus: string;
   private sidebarVisible: boolean = true;
-  private listRoutes: RouteInfo[];
+  private listRoutes: RouteInfo[] = Routes.filter(listTitle => listTitle);
   private routerEventsSubscription: Subscription = null;
+  private infobarStatusSubscription: Subscription = null;
 
-  constructor(private location: Location, private element: ElementRef, private router: Router, private modalService: NgbModal) { }
+  constructor(private location: Location, private element: ElementRef, private router: Router, private modalService: NgbModal,
+    private coreState: CoreState) { }
 
   // Function that detects viewport size change, determining:
   // - Addition of color white/transparent to the navbar on resize (this is for the collapsible menu)
@@ -39,10 +43,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit() {
-    // Get Sidebar route options
-    this.listRoutes = Routes.filter(listTitle => listTitle);
-
-    // Update navbar colors and effects and register their change on resize
+    // Detects viewport size, influencing navbar colors and applied effects
     this.onResize();
     window.addEventListener("resize", this.onResize);
 
@@ -56,6 +57,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.sidebarToggle();
       }
     });
+
+    // Subscribe to infobar status text change
+    this.infobarStatusSubscription = this.coreState.getInfobarStatus().subscribe((status) => { this.infobarStatus = status; });
   }
 
   // Show/Hide collapsible Menu (only visible on small screens) and apply specific style changes
@@ -170,5 +174,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     window.removeEventListener("resize", this.onResize);
     this.routerEventsSubscription.unsubscribe();
+    this.infobarStatusSubscription.unsubscribe();
   }
 }

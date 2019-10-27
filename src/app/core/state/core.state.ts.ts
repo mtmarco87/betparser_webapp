@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { UserSettings } from '../models/UserSettings';
 import { LocalStorageService } from '../api/local-storage/local-storage.service';
 
@@ -14,6 +14,7 @@ export class CoreState {
     public static scrolledBottom: string = 'bottom';
     private loadingStack$ = new BehaviorSubject<number>(0);
     private userSettings$ = new BehaviorSubject<UserSettings>(null);
+    private infobarStatus$ = new BehaviorSubject<string[]>([]);
 
     constructor(private cache: LocalStorageService) { }
 
@@ -34,6 +35,7 @@ export class CoreState {
     setIsAppLoading(isLoading: boolean) {
         let loadingStack = this.loadingStack$.value;
         if (isLoading) {
+            this.setInfobarStatus("Loading data...", CoreState.tmpMsg);
             loadingStack += 1;
         }
         else {
@@ -59,5 +61,24 @@ export class CoreState {
     setUserSettings(userSettings: UserSettings) {
         this.cache.cacheUserSettings(userSettings);
         this.userSettings$.next(userSettings);
+    }
+
+    getInfobarStatus(): Observable<string> {
+        return this.infobarStatus$.asObservable().pipe(map((msgStack) => {
+            let output: string = '';
+            if (msgStack.length > 0) {
+                output = msgStack[msgStack.length - 1];
+            }
+            return output;
+        }),
+            tap((msg) => {
+                this.infobarStatus$.value.pop();
+            }));
+    }
+
+    setInfobarStatus(msg: string) {
+        const msgStack = this.infobarStatus$.value;
+        msgStack.push(msg);
+        this.infobarStatus$.next(msgStack);
     }
 }

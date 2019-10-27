@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { BetsFacade } from '../../bets.facade';
 import { SureBet } from '../../models/SureBet';
 import { Subscription } from 'rxjs';
+import { SharedUtils } from 'app/shared/utils/shared.utils';
+import { AppSettings } from 'app/core/models/AppSettings';
 
 
 @Component({
@@ -16,10 +18,14 @@ export class SureBetsComponent implements OnInit {
   constructor(private betsFacade: BetsFacade) { }
 
   ngOnInit() {
-    this.getSureBetsSubscription = this.betsFacade.getSureBets().subscribe((newSureBets) => this.sureBets = newSureBets);
+    this.getSureBetsSubscription = this.betsFacade.getSureBets().subscribe((newSureBets) => {
+      this.betsFacade.setInfoBarStatus(SharedUtils.sprintf(AppSettings.FoundSureBetsMsg, newSureBets.length));
+      this.sureBets = newSureBets;
+    });
   }
 
   ngOnDestroy() {
     this.getSureBetsSubscription.unsubscribe();
+    this.betsFacade.setInfoBarStatus('');
   }
 }

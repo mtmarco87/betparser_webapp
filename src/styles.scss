@@ -176,3 +176,25 @@
     z-index: -1;
     content: " ";
   }
+
+  .infobar {
+    position: relative;
+    color: #ffffff;
+  }
+
+  .white-content .infobar {
+    color: #1d253b;
+  }
+
+  @media only screen and (max-width: 993px) {
+    .infobar {
+      left: 0%;
+      top: 1px;
+    }
+  }
+
+  @media only screen and (min-width: 994px) {
+    .infobar {
+      left: 70%;
+    }
+  }
