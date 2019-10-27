@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map, filter } from 'rxjs/operators';
-import { CoreState } from 'app/core/state/core.state.ts';
+import { CoreState } from 'app/core/state/core.state';
 import { MatchPaginationService } from 'app/core/api/match-pagination/match-pagination.service';
 import { MatchGroup } from './models/MatchGroup';
 import { SureBet } from './models/SureBet';

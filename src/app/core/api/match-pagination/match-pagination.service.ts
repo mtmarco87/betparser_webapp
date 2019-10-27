@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { CoreState } from 'app/core/state/core.state.ts';
+import { CoreState } from 'app/core/state/core.state';
 
 
 @Injectable({

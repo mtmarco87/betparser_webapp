@@ -35,7 +35,7 @@ export class CoreState {
     setIsAppLoading(isLoading: boolean) {
         let loadingStack = this.loadingStack$.value;
         if (isLoading) {
-            this.setInfobarStatus("Loading data...", CoreState.tmpMsg);
+            this.setInfobarStatus("Loading data...");
             loadingStack += 1;
         }
         else {

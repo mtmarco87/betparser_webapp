@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { CoreState } from 'app/core/state/core.state.ts';
+import { CoreState } from 'app/core/state/core.state';
 
 
 @Component({

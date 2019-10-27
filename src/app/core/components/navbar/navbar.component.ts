@@ -7,7 +7,7 @@ import { Location } from "@angular/common";
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AppSettings } from 'app/core/models/AppSettings';
 import { Subscription } from 'rxjs';
-import { CoreState } from 'app/core/state/core.state.ts';
+import { CoreState } from 'app/core/state/core.state';
 
 
 @Component({
