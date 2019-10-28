@@ -4,6 +4,8 @@ export class AppSettings {
     static LocationHash: string = '#';
     
     // Messages
-    static ShowingMatchesMsg: string = 'Showing: {0}/{1} matches';
-    static FoundSureBetsMsg: string = 'Found {0} SureBets';
+    static NotFoundMatchesMsg: string = 'No matches found.';    
+    static SearchFoundMatchesMsg: string = 'Found {0} matches. Search Keywords: [{1}]';    
+    static FoundMatchesMsg: string = 'Found {0} matches.';
+    static FoundSureBetsMsg: string = 'Found {0} SureBets.';
 }

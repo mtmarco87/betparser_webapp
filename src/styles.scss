@@ -178,8 +178,8 @@
   }
 
   .infobar {
-    position: relative;
     color: #ffffff;
+    z-index: 4;
   }
 
   .white-content .infobar {
@@ -187,14 +187,28 @@
   }
 
   @media only screen and (max-width: 993px) {
-    .infobar {
-      left: 0%;
-      top: 1px;
+    .infobar-fullwidth {
+      display: none;
+    }
+
+    .bg-white .infobar-reduced {
+      display: none;
+    }
+    
+    .infobar-reduced{
+      left: 12px;
+      position: relative;
     }
   }
 
   @media only screen and (min-width: 994px) {
-    .infobar {
-      left: 70%;
+    .infobar-fullwidth {
+      position: relative;
+      top: 12px;
+      white-space: nowrap;
+    }
+
+    .infobar-reduced {
+      display: none;
     }
   }

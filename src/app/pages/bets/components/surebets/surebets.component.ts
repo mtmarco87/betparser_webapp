@@ -19,13 +19,15 @@ export class SureBetsComponent implements OnInit {
 
   ngOnInit() {
     this.getSureBetsSubscription = this.betsFacade.getSureBets().subscribe((newSureBets) => {
-      this.betsFacade.setInfoBarStatus(SharedUtils.sprintf(AppSettings.FoundSureBetsMsg, newSureBets.length));
+      if (newSureBets !== undefined && newSureBets != null && newSureBets.length > 0) {
+        this.betsFacade.setInfobarMessage(SharedUtils.sprintf(AppSettings.FoundSureBetsMsg, newSureBets.length));
+      }
       this.sureBets = newSureBets;
     });
   }
 
   ngOnDestroy() {
     this.getSureBetsSubscription.unsubscribe();
-    this.betsFacade.setInfoBarStatus('');
+    this.betsFacade.setInfobarMessage('');
   }
 }

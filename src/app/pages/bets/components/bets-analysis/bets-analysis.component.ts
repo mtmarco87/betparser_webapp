@@ -2,10 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { MatchGroup } from '../../models/MatchGroup';
 import { QuoteGroupType } from '../../models/QuoteGroupType';
 import { BetsFacade } from '../../bets.facade';
-import { Subscription, BehaviorSubject } from 'rxjs';
-import { match } from 'minimatch';
+import { Subscription } from 'rxjs';
 import { AppSettings } from 'app/core/models/AppSettings';
 import { SharedUtils } from 'app/shared/utils/shared.utils';
+import { MatchFilter } from '../../models/MatchFilter';
 
 
 @Component({
@@ -16,51 +16,83 @@ import { SharedUtils } from 'app/shared/utils/shared.utils';
 export class BetsAnalysisComponent implements OnInit {
   quoteGroupTypes: QuoteGroupType[] = QuoteGroupType.defaultTypes;
   matchGroups: MatchGroup[];
-  private retrievedMatches: number;
   private totalMatches: number;
-  private onScrollSubscription: Subscription = null;
+  private searchText: string;
+  private getScrollBottomSubscription: Subscription = null;
   private getMatchesSubscription: Subscription = null;
   private getMatchesCountSubscription: Subscription = null;
+  private getSearchTextSubscription: Subscription = null;
 
 
   constructor(private betsFacade: BetsFacade) { }
 
   ngOnInit() {
     // Subscription to page scroll to bottom event: Retrieve of some other elements at each interaction
-    this.onScrollSubscription = this.betsFacade.getScrollBottomStatus().subscribe(() => {
+    this.getScrollBottomSubscription = this.betsFacade.getScrollBottomStatus().subscribe(() => {
       this.betsFacade.requestMoreMatchGroups();
     });
 
-    // Subscription to retrieved Matches
+    // Subscription to paginated/filtered Matches
     this.getMatchesSubscription = this.betsFacade.getMatchGroups().subscribe((newMatchGroups) => {
-      this.retrievedMatches = 0;
-      newMatchGroups.forEach((matchGroup) => {
-        this.retrievedMatches += matchGroup.children.length;
-      });
-      this.updateInfoBar();
-
       this.matchGroups = newMatchGroups;
+      this.updateInfobar();
     });
 
     // Subsctiption to total Matches count
     this.getMatchesCountSubscription = this.betsFacade.getTotalMatches().subscribe((count) => {
       this.totalMatches = count;
-      this.updateInfoBar();
+      this.updateInfobar();
+    });
+
+    // Subscription to user search action. Specific page search implementation
+    this.getSearchTextSubscription = this.betsFacade.getSearchText().subscribe((searchText) => {
+      const filter = new MatchFilter();
+      if (searchText !== null && searchText.trim() !== '') {
+        this.searchText = searchText;
+        const splittedSearch = searchText.split(',');
+        filter.All = splittedSearch;
+      }
+      else {
+        this.searchText = null;
+      }
+      this.betsFacade.requestMoreMatchGroups(filter);
     });
   }
 
-  updateInfoBar() {
-    if (this.retrievedMatches === undefined || this.retrievedMatches === 0 ||
-      this.totalMatches === undefined || this.totalMatches === 0) {
+  updateInfobar() {
+    let message = '';
+    if (this.totalMatches === undefined || this.totalMatches === null || this.totalMatches === 0) {
+      // message = AppSettings.NotFoundMatchesMsg;
       return;
     }
-    this.betsFacade.setInfoBarStatus(SharedUtils.sprintf(AppSettings.ShowingMatchesMsg, this.retrievedMatches, this.totalMatches));
+    else {
+      let displayedMatches = this.getDisplayedMatchesCount();
+      if (this.searchText !== null && this.searchText.trim() !== '') {
+        const cleanedSearchText = this.searchText.split(',').map(search => { return search.trim(); }).join(', ');
+        message = SharedUtils.sprintf(AppSettings.SearchFoundMatchesMsg, displayedMatches, cleanedSearchText);
+      }
+      else {
+        message = SharedUtils.sprintf(AppSettings.FoundMatchesMsg, this.totalMatches);
+      }
+    }
+
+    this.betsFacade.setInfobarMessage(message);
+  }
+
+  getDisplayedMatchesCount(): number {
+    let displayedMatches = 0;
+    this.matchGroups.forEach(matchGroup => {
+      displayedMatches += matchGroup.children.length;
+    });
+
+    return displayedMatches;
   }
 
   ngOnDestroy() {
-    this.onScrollSubscription.unsubscribe();
+    this.getScrollBottomSubscription.unsubscribe();
     this.getMatchesSubscription.unsubscribe();
     this.getMatchesCountSubscription.unsubscribe();
-    this.betsFacade.setInfoBarStatus('');
+    this.getSearchTextSubscription.unsubscribe();
+    this.betsFacade.setInfobarMessage('');
   }
 }

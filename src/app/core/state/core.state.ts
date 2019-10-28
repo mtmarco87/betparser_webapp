@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
-import { map, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable, timer } from "rxjs";
+import { map, tap, debounce } from 'rxjs/operators';
 import { UserSettings } from '../models/UserSettings';
 import { LocalStorageService } from '../api/local-storage/local-storage.service';
 
@@ -14,7 +14,8 @@ export class CoreState {
     public static scrolledBottom: string = 'bottom';
     private loadingStack$ = new BehaviorSubject<number>(0);
     private userSettings$ = new BehaviorSubject<UserSettings>(null);
-    private infobarStatus$ = new BehaviorSubject<string[]>([]);
+    private infobarMessage$ = new BehaviorSubject<string[]>([]);
+    private searchText$ = new BehaviorSubject<string>(null);
 
     constructor(private cache: LocalStorageService) { }
 
@@ -35,7 +36,7 @@ export class CoreState {
     setIsAppLoading(isLoading: boolean) {
         let loadingStack = this.loadingStack$.value;
         if (isLoading) {
-            this.setInfobarStatus("Loading data...");
+            this.setInfobarMessage("Loading data...");
             loadingStack += 1;
         }
         else {
@@ -63,22 +64,44 @@ export class CoreState {
         this.userSettings$.next(userSettings);
     }
 
-    getInfobarStatus(): Observable<string> {
-        return this.infobarStatus$.asObservable().pipe(map((msgStack) => {
-            let output: string = '';
-            if (msgStack.length > 0) {
-                output = msgStack[msgStack.length - 1];
-            }
-            return output;
-        }),
+    // Producer/Consumer Infobar Messages Queue
+    getInfobarMessage(): Observable<string> {
+        // Observable pipe where for each new message received in the msgStack, we try to show it, and to
+        // remove it after 100 ms, so that we can show the next one if any. The end situation will be always with the last message displayed
+        return this.infobarMessage$.asObservable().pipe(
+            map((msgStack) => {
+                let msg: string = '';
+                if (msgStack.length > 0) {
+                    msg = msgStack[0];
+                }
+                return msg;
+            }),
             tap((msg) => {
-                this.infobarStatus$.value.pop();
+                let msgStack = this.infobarMessage$.value;
+                if (msgStack.length > 1) {
+                    setTimeout(function () {
+                        if (this.infobarMessage$.value === msgStack) {
+                            msgStack = msgStack.reverse();
+                            msgStack.pop();
+                            this.infobarMessage$.next(msgStack.reverse());
+                        }
+                    }.bind(this), 20);
+                }
             }));
     }
 
-    setInfobarStatus(msg: string) {
-        const msgStack = this.infobarStatus$.value;
+    setInfobarMessage(msg: string) {
+        // Here we push to the bottom of the messages stack a new message
+        const msgStack = this.infobarMessage$.value.slice();
         msgStack.push(msg);
-        this.infobarStatus$.next(msgStack);
+        this.infobarMessage$.next(msgStack);
+    }
+
+    getSearchText(): Observable<string> {
+        return this.searchText$.asObservable().pipe(debounce(() => timer(400)));
+    }
+
+    setSearchText(searchText: string) {
+        this.searchText$.next(searchText);
     }
 }

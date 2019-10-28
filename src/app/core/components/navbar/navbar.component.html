@@ -14,7 +14,7 @@
       <span [ngClass]="[!showSideBarToggler ? 'left':'', !reducedViewport ? 'glow':'', menuCollapsed ? 'glowOnHover':'']" 
       class=" navbar-brand"> {{ getTitle() }} </span>
     </div>
-    <span class="infobar">{{ infobarStatus }}</span>
+    <span class="infobar infobar-reduced">{{ infobarStatus }}</span>
     <button *ngIf="showMenuToggler"
       aria-label="Toggle navigation"
       class=" navbar-toggler navbar-menu"
@@ -30,6 +30,7 @@
     </button>
     <div *ngIf="showMenuToggler" class=" navbar-collapse" [ngbCollapse]="menuCollapsed" id="navigation">
       <ul class=" navbar-nav ml-auto">
+        <li class="infobar infobar-fullwidth">{{ infobarStatus }}</li>
         <li class=" search-bar input-group highlightOnHover">
           <button
             class=" btn btn-link"
@@ -122,10 +123,12 @@
 <ng-template #content let-modal>
   <div class=" modal-header">
     <input
+      (keyup)="onSearch($event.target.value)"
       class=" form-control"
       id="inlineFormInputGroup"
       placeholder="SEARCH"
       type="text"
+      [value]="searchText"
     />
 
     <button

@@ -46,6 +46,10 @@ export class BookmakerInfo {
         return quoteValue;
     }
 
+    hasQuotesAvailable() {
+        return this.quoteGroups.some(qg => { return qg.quotes.some(q => { return q.isAvailable; }); });
+    }
+
     public static createEmpty(bookmakerName): BookmakerInfo {
         // Here we fake create a new BookmakerInfo with no quotes under it
         return this.createFromDb({ Bookmaker: bookmakerName });

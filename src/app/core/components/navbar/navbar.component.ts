@@ -23,6 +23,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   menuCollapsed: boolean = true;
   closeResult: string;
   infobarStatus: string;
+  searchText: string = '';
   private sidebarVisible: boolean = true;
   private listRoutes: RouteInfo[] = Routes.filter(listTitle => listTitle);
   private routerEventsSubscription: Subscription = null;
@@ -59,7 +60,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     });
 
     // Subscribe to infobar status text change
-    this.infobarStatusSubscription = this.coreState.getInfobarStatus().subscribe((status) => { this.infobarStatus = status; });
+    this.infobarStatusSubscription = this.coreState.getInfobarMessage().subscribe((status) => { this.infobarStatus = status; });
   }
 
   // Show/Hide collapsible Menu (only visible on small screens) and apply specific style changes
@@ -157,6 +158,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
       return 'by clicking on a backdrop';
     } else {
+      this.onSearch('');
       return `with: ${reason}`;
     }
   }
@@ -169,6 +171,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (this.sidebarVisible) {
       this.sidebarToggle();
     }
+  }
+
+  onSearch(searchText: string) {
+    this.searchText = searchText;
+    this.coreState.setSearchText(this.searchText);
   }
 
   ngOnDestroy() {

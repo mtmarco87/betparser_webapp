@@ -159,7 +159,7 @@ export class Match {
             }
 
             if (dbMatchByBookmaker !== undefined && dbMatchByBookmaker.StartDate !== undefined) {
-                match.StartDate = BetsUtils.dateToString(BetsUtils.parseMatchDate(dbMatchByBookmaker.StartDate));
+                match.StartDate = BetsUtils.formatMatchDate(BetsUtils.parseMatchDate(dbMatchByBookmaker.StartDate));
             }
 
             if (dbMatchByBookmaker !== undefined && dbMatchByBookmaker.StartTime !== undefined) {
