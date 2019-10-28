@@ -47,7 +47,7 @@ export class BetsAnalysisComponent implements OnInit {
     // Subscription to user search action. Specific page search implementation
     this.getSearchTextSubscription = this.betsFacade.getSearchText().subscribe((searchText) => {
       const filter = new MatchFilter();
-      if (searchText !== null && searchText.trim() !== '') {
+      if (searchText !== undefined && searchText !== null && searchText.trim() !== '') {
         this.searchText = searchText;
         const splittedSearch = searchText.split(',');
         filter.All = splittedSearch;
@@ -67,7 +67,7 @@ export class BetsAnalysisComponent implements OnInit {
     }
     else {
       let displayedMatches = this.getDisplayedMatchesCount();
-      if (this.searchText !== null && this.searchText.trim() !== '') {
+      if (this.searchText !== undefined && this.searchText !== null && this.searchText.trim() !== '') {
         const cleanedSearchText = this.searchText.split(',').map(search => { return search.trim(); }).join(', ');
         message = SharedUtils.sprintf(AppSettings.SearchFoundMatchesMsg, displayedMatches, cleanedSearchText);
       }
