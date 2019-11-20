@@ -1,12 +1,12 @@
 # BetParser WebApp
 
-BetParser WebApp is connected to the same FireBase DB of (BetParser Crawler)[https://bitbucket.org/marcotrinastich/betparser_crawler], where parsed betting odds and any information is written.
+BetParser WebApp is connected to the same FireBase DB of [BetParser Crawler](https://bitbucket.org/marcotrinastich/betparser_crawler), where parsed betting odds and any information is written.
 
 This WebApp is an Angular application, that allows to view and analyze live updated betting odds. The application is also able to scan for SureBets and ValueBets, and to propose valuable betting information to the user.
 
 
 ## Live Demo Page
-You can visit the latest working version of BetParser WebApp on: https://parser-b8114.firebaseapp.com/
+You can visit the latest working version of [BetParser WebApp here](https://parser-b8114.firebaseapp.com/)
 
 ## Environment Setup
 
@@ -22,7 +22,7 @@ We suggest to use Yarn, since the configuration of the source code has been made
 
 Choosen the package manager, we have to follow these steps:
 
-1) Install the choosen package manager ((Yarn)[https://yarnpkg.com/lang/en/docs/install/#windows-stable] or (Node-NPM)[https://nodejs.org/it/download/])
+1) Install the choosen package manager ([Yarn](https://yarnpkg.com/lang/en/docs/install/#windows-stable) or [Node-NPM](https://nodejs.org/it/download/))
 
 2) Install all the project libs - open a terminal/cmd window on the project folder and run: `yarn install` (or `npm install`)
 
