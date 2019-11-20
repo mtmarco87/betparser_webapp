@@ -1,6 +1,6 @@
 # BetParser WebApp
 
-BetParser WebApp is connected to the same FireBase DB of [BetParser Crawler](https://bitbucket.org/marcotrinastich/betparser_crawler), where parsed betting odds and any information is written.
+BetParser WebApp is connected to the same FireBase DB of [BetParser Crawler](https://bitbucket.org/marcotrinastich/betparser_crawler), where the parsed betting odds and any information is written.
 
 This WebApp is an Angular application, that allows to view and analyze live updated betting odds. The application is also able to scan for SureBets and ValueBets, and to propose valuable betting information to the user.
 
