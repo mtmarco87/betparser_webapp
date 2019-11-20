@@ -28,7 +28,7 @@ Choosen the package manager, we have to follow these steps:
 
 3) Install global tools - open a terminal again and run: `yarn global add @angular/cli` (or `npm install -g @angular/cli`), to install globally the Angular CLI (ver >= 8), and `yarn global add firebase-tools` (or `npm install -g firebase-tools`), to install globally the FireBase CLI (ver > 7.5)
 
-4) Check the section below for the usage of the Angular CLI, and on the internet for more information about the FireBase CLI. The FireBase CLI is extremely useful if one wants not only read the crawler data from the shared FireBase DB, but also wants to deploy the WebApp directly on the FireBase cloud web storage.
+4) Check the section below for the usage of the Angular CLI, and on the internet for more information about the FireBase CLI. The FireBase CLI is extremely useful if one wants not only to read the crawler data from the shared DB, but also deploy the WebApp directly on the FireBase cloud web storage.
 
 ## IDE Configuration
 
