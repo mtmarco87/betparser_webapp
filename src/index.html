@@ -35,10 +35,21 @@
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet" />
   <!--       Google Maps       -->
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=YOUR_MAPS_API_KEY"></script>
+  <script type="text/javascript">
+    window.showAndroidToast = function showAndroidToast() {
+      try {
+        Android.showAndroidToast();
+      } catch(e) {
+      }
+    }
+</script>
 </head>
 
 <body>
   <app-root></app-root>
 </body>
+
+
+
 
 </html>
