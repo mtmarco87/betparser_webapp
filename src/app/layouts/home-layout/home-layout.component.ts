@@ -23,7 +23,7 @@ export class HomeLayoutComponent implements OnInit {
   }
 
   startButtonCallback() {
-    console.log("startButtonCallback");
+    console.log('startButtonCallback');
     setTimeout(() => {
       if (window['showAndroidToast']) {
         window['showAndroidToast']();
