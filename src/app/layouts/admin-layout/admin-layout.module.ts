@@ -1,9 +1,9 @@
-import { NgModule } from "@angular/core";
+import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { RouterModule } from "@angular/router";
+import { RouterModule } from '@angular/router';
 
 import { SharedModule } from 'app/shared/shared.module';
-import { AdminLayoutRoutes } from "./admin-layout.routing";
+import { AdminLayoutRoutes } from './admin-layout.routing';
 import { AdminLayoutComponent } from './admin-layout.component';
 import { CoreModule } from 'app/core/core.module';
 import { DashboardModule } from 'app/pages/dashboard/dashboard.module';
