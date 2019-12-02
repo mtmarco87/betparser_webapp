@@ -1,11 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit } from '@angular/core';
 import { CoreState } from 'app/core/state/core.state';
 
 
 @Component({
-  selector: "app-admin-layout",
-  templateUrl: "./admin-layout.component.html",
-  styleUrls: ["./admin-layout.component.scss"]
+  selector: 'app-admin-layout',
+  templateUrl: './admin-layout.component.html',
+  styleUrls: ['./admin-layout.component.scss']
 })
 export class AdminLayoutComponent implements OnInit {
   isAppLoading = false;

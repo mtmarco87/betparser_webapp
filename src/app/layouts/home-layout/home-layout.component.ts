@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -8,7 +9,7 @@ import { Component, OnInit, ElementRef } from '@angular/core';
 })
 export class HomeLayoutComponent implements OnInit {
 
-  constructor(private element: ElementRef) { }
+  constructor(private element: ElementRef, private router: Router) { }
 
   ngOnInit() {
     // Disable animations/transitions until the page has loaded (and then the css animations can start).
@@ -19,5 +20,15 @@ export class HomeLayoutComponent implements OnInit {
     window.setTimeout(function () {
       banner.classList.remove('is-loading');
     }, 100);
+  }
+
+  startButtonCallback() {
+    console.log('startButtonCallback');
+    setTimeout(() => {
+      if (window['showAndroidToast']) {
+        window['showAndroidToast']();
+      };
+      this.router.navigate(['/bets/analysis'])
+    }, 1000);
   }
 }
