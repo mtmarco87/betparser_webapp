@@ -1,90 +1,173 @@
 # BetParser WebApp
 
-BetParser WebApp is connected to the same FireBase DB of [BetParser Crawler](https://github.com/mtmarco87/betparser_crawler), where the parsed betting odds and any information is written.
+BetParser WebApp is an Angular application designed to analyze live betting odds. It connects to the same Firebase database as [BetParser Crawler](https://github.com/mtmarco87/betparser_crawler), where parsed betting odds and related information are stored.
 
-This WebApp is an Angular application, that allows to view and analyze live updated betting odds. The application is also able to scan for SureBets and ValueBets, and to propose valuable betting information to the user.
+### Key Features:
 
+- **Live Odds Analysis**: View and analyze live betting odds in real-time.
+- **SureBets and ValueBets Detection**: Automatically identify profitable betting opportunities.
+- **Firebase Integration**: Access shared data from a Firebase database.
 
-## Live Demo Page
-You can visit the latest working version of [BetParser WebApp here](https://parser-b8114.firebaseapp.com/)
+## Table of Contents
+
+1. [Live Demo](#live-demo)
+2. [Environment Setup](#environment-setup)
+3. [IDE Configuration](#ide-configuration)
+4. [Application Configuration](#application-configuration)
+5. [UX Template](#ux-template)
+6. [Angular Framework Usage](#angular-framework-usage)
+7. [License](#license)
+
+## Live Demo
+
+Check out the latest working version of the app here:  
+[BetParser WebApp](https://parser-b8114.firebaseapp.com/)
 
 ## Environment Setup
 
-### Install Libraries (node modules)
+### Prerequisites
 
-To prepare the environment, the first thing we need to do is to install the libraries.
-There are 2 ways to fulfill this task:
+1. Install a package manager:
 
-1) NPM - node package manager
-2) Yarn package manager
+   - [Yarn](https://yarnpkg.com/lang/en/docs/install/#windows-stable) (recommended)
+   - [Node-NPM](https://nodejs.org/it/download/)
 
-We suggest to use Yarn, since the configuration of the source code has been made using this tool.
+2. Install global tools:
+   ```bash
+   yarn global add @angular/cli firebase-tools
+   # or
+   npm install -g @angular/cli firebase-tools
+   ```
+   - **Angular CLI**: Version >= 8
+   - **Firebase CLI**: Version > 7.5
 
-Choosen the package manager, we have to follow these steps:
+### Steps to Set Up
 
-1) Install the choosen package manager ([Yarn](https://yarnpkg.com/lang/en/docs/install/#windows-stable) or [Node-NPM](https://nodejs.org/it/download/))
+1. **Install Dependencies**:  
+   Open a terminal in the project folder and run:
 
-2) Install all the project libs - open a terminal/cmd window on the project folder and run: `yarn install` (or `npm install`)
+   ```bash
+   yarn install
+   # or
+   npm install
+   ```
 
-3) Install global tools - open a terminal again and run: `yarn global add @angular/cli` (or `npm install -g @angular/cli`), to install globally the Angular CLI (ver >= 8), and `yarn global add firebase-tools` (or `npm install -g firebase-tools`), to install globally the FireBase CLI (ver > 7.5)
+2. **Verify Global Tools**:  
+   Ensure Angular CLI and Firebase CLI are installed globally.  
+   Use the following commands to check versions:
 
-4) Check the section below for the usage of the Angular CLI, and on the internet for more information about the FireBase CLI. The FireBase CLI is extremely useful if one wants not only to read the crawler data from the shared DB, but also deploy the WebApp directly on the FireBase cloud web storage.
+   ```bash
+   ng version
+   firebase --version
+   ```
+
+3. **Learn More**:
+   - [Angular CLI Documentation](https://angular.io/cli)
+   - [Firebase CLI Documentation](https://firebase.google.com/docs/cli)
 
 ## IDE Configuration
 
-1) Choose your favourite IDE between e.g. Visual Studio Code or WebStorm (suggested VS Code, freeware)
+1. **Choose an IDE**:  
+   Recommended: [Visual Studio Code](https://code.visualstudio.com/) (freeware).
 
-2) If using VS Code it comes really in a handy to add some extensions:
-	
-	- Angular Files (quick scaffolding)
-	- Angular Language Service (angular templates support)
-	- Angular Snippets (extremely powerful snippets)
-	- Debugger for Chrome
-	- HTML Format
+2. **Install VS Code Extensions**:  
+   Add these extensions for a better development experience:
+   - Angular Files (quick scaffolding)
+   - Angular Language Service (template support)
+   - Angular Snippets (powerful snippets)
+   - Debugger for Chrome
+   - HTML Format
 
 ## Application Configuration
 
-1) FireBase DB: the most important files that need to be modified to get the app running are: `src/environment/environment.ts` and `src/environment/environment.prod.ts`. Inside this files it has to be inserted the FireBase DB configuration (api key, domain, etc.)
+1. **Firebase DB**:  
+   Update the following files with your Firebase DB configuration (API key, domain, etc.):
 
-2) Google Maps (optional): to enable some extra feature (google maps) is possible to modify `src/index.html` and replace the `YOUR_MAPS_API_KEY` placeholder with your Google Maps API key
+   - `src/environment/environment.ts`
+   - `src/environment/environment.prod.ts`
 
-3) FireBase WebApp Deploy (optional): if you'd like to be able to deploy your web app to FireBase, you can use the following commands:
+2. **Google Maps (Optional)**:  
+   To enable Google Maps features, replace the `YOUR_MAPS_API_KEY` placeholder in `src/index.html` with your Google Maps API key.
 
-	- `ng build --prod`, first of all to get a final build of your app
-	- `firebase login --interactive`, to login in interactive mode to your FireBase account
-	- `firebase deploy`, to start the deploy of the latest version of your webapp
-	- some further configuration may be needed to set up the target project/cloud web storage on FireBase
+3. **Firebase WebApp Deployment (Optional)**:  
+   Deploy the app to Firebase using these commands:
+   ```bash
+   ng build --prod
+   firebase login --interactive
+   firebase deploy
+   ```
+   Additional configuration may be required to set up the target project/cloud storage on Firebase.
 
-## UX Template	
+## UX Template
 
-A big thanks goes to Creative Tim (www.creative-tim.com) with his amazing Black Dashboard Angular UI template.
+Special thanks to [Creative Tim](https://www.creative-tim.com) for the Black Dashboard Angular UI template.  
+While heavily reworked, the app's graphical charm is due to their amazing design.
 
-We did a lot of reworks, so much that the interface is quite different now, but the graphical charm of this app is completely due to his job.
+## Angular Framework Usage
 
-## Extra: Angular Framework Usage
+### Development Server
 
-### Development server
+Run the following command to start a development server:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+```bash
+ng serve
+```
 
-### Code scaffolding
+Navigate to `http://localhost:4200/`. The app will automatically reload when source files are modified.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Code Scaffolding
+
+Generate a new component, directive, or other Angular elements using:
+
+```bash
+ng generate component component-name
+ng generate directive|pipe|service|class|guard|interface|enum|module
+```
 
 ### Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Build the project with:
 
-### Running unit tests
+```bash
+ng build
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+For a production build, use:
 
-### Running end-to-end tests
+```bash
+ng build --prod
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+### Running Unit Tests
 
-### Further help
+Execute unit tests via [Karma](https://karma-runner.github.io):
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+```bash
+ng test
+```
+
+### Running End-to-End Tests
+
+Execute end-to-end tests via [Protractor](http://www.protractortest.org/):
+
+```bash
+ng e2e
+```
+
+### Further Help
+
+To get more help on the Angular CLI, use:
+
+```bash
+ng help
+```
+
+Or visit the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+---
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+
+## License
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). See the `LICENSE` file for more details.
