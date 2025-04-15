@@ -1,22 +1,52 @@
 # BetParser WebApp
 
-BetParser WebApp is an Angular application designed to analyze live betting odds. It connects to the same Firebase database as [BetParser Crawler](https://github.com/mtmarco87/betparser_crawler), where parsed betting odds and related information are stored.
+BetParser WebApp is a modern Angular application for analyzing live betting odds. Built for sports betting enthusiasts and analysts, it provides real-time insights into SureBets and ValueBets, helping users identify profitable opportunities.
 
-### Key Features:
+## Disclaimer
 
-- **Live Odds Analysis**: View and analyze live betting odds in real-time.
-- **SureBets and ValueBets Detection**: Automatically identify profitable betting opportunities.
-- **Firebase Integration**: Access shared data from a Firebase database.
+This software is provided for educational and research purposes only. The authors of this project do not condone or encourage any illegal activities, including but not limited to unauthorized data scraping or infringement of intellectual property rights.
+
+All trademarks, logos, and brand names mentioned in this project (e.g., Bwin, Bet365, William Hill, Sisal, Eurobet, etc.) are the property of their respective owners. The use of these names is for identification purposes only and does not imply endorsement or affiliation.
+
+By using this software, you agree that the authors are not liable for any misuse or legal consequences arising from its use. It is your responsibility to ensure compliance with all applicable laws and regulations in your jurisdiction.
 
 ## Table of Contents
 
-1. [Live Demo](#live-demo)
-2. [Environment Setup](#environment-setup)
-3. [IDE Configuration](#ide-configuration)
-4. [Application Configuration](#application-configuration)
-5. [UX Template](#ux-template)
-6. [Angular Framework Usage](#angular-framework-usage)
-7. [License](#license)
+1. [Project Overview](#project-overview)
+2. [Features](#features)
+3. [Screenshots](#screenshots)
+4. [Live Demo](#live-demo)
+5. [Environment Setup](#environment-setup)
+6. [IDE Configuration](#ide-configuration)
+7. [Application Configuration](#application-configuration)
+8. [UX Template](#ux-template)
+9. [Angular Framework Usage](#angular-framework-usage)
+10. [License](#license)
+
+## Project Overview
+
+BetParser WebApp is a tool designed to empower sports betting enthusiasts and analysts by providing actionable insights into live betting odds. By leveraging Firebase for real-time data synchronization, the app ensures users can access up-to-date information on SureBets and ValueBets. Additionally, its integration with [BetParser Crawler](https://github.com/mtmarco87/betparser_crawler) allows seamless access to parsed betting data, creating a unified ecosystem for betting analysis. Built with Angular, the app prioritizes responsiveness and ease of use, making it suitable for both casual users and professional analysts.
+
+### Features:
+
+- **Live Odds Analysis**: View and analyze live betting odds in real-time.
+- **SureBets and ValueBets Detection**: Automatically identify profitable betting opportunities.
+- **Firebase Integration**: Seamlessly sync and access shared data.
+
+### Screenshots
+
+Here are some screenshots of the BetParser WebApp in action:
+
+![Home Page](assets/screenshots/webapp-1.png)
+
+#### Live Odds Analysis
+
+![Live Odds Analysis 1](assets/screenshots/webapp-2.png)
+![Live Odds Analysis 2](assets/screenshots/webapp-3.png)
+
+#### SureBets Detection
+
+![SureBets Detection](assets/screenshots/webapp-4.png)
 
 ## Live Demo
 
@@ -170,4 +200,4 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## License
 
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). See the `LICENSE` file for more details.
+This project is licensed under the [MIT License](LICENSE). See the `LICENSE` file for more details.
