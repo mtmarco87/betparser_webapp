@@ -17,34 +17,40 @@ By using this software, you agree that the authors are not liable for any misuse
 3. [Screenshots](#screenshots)
 4. [Live Demo](#live-demo)
 5. [Environment Setup](#environment-setup)
-6. [IDE Configuration](#ide-configuration)
-7. [Application Configuration](#application-configuration)
-8. [UX Template](#ux-template)
-9. [Angular Framework Usage](#angular-framework-usage)
+   - [Prerequisites](#prerequisites)
+   - [Setup Steps](#setup-steps)
+   - [Configuration](#configuration)
+6. [Usage](#usage)
+   - [How to Run](#how-to-run)
+7. [Development](#development)
+   - [Angular Framework](#angular-framework)
+   - [IDE Configuration](#ide-configuration)
+8. [Acknowledgments](#acknowledgments)
+9. [Support](#support)
 10. [License](#license)
 
 ## Project Overview
 
 BetParser WebApp is a tool designed to empower sports betting enthusiasts and analysts by providing actionable insights into live betting odds. By leveraging Firebase for real-time data synchronization, the app ensures users can access up-to-date information on SureBets and ValueBets. Additionally, its integration with [BetParser Crawler](https://github.com/mtmarco87/betparser_crawler) allows seamless access to parsed betting data, creating a unified ecosystem for betting analysis. Built with Angular, the app prioritizes responsiveness and ease of use, making it suitable for both casual users and professional analysts.
 
-### Features:
+## Features
 
 - **Live Odds Analysis**: View and analyze live betting odds in real-time.
 - **SureBets and ValueBets Detection**: Automatically identify profitable betting opportunities.
 - **Firebase Integration**: Seamlessly sync and access shared data.
 
-### Screenshots
+## Screenshots
 
 Here are some screenshots of the BetParser WebApp in action:
 
 ![Home Page](assets/screenshots/webapp-1.png)
 
-#### Live Odds Analysis
+### Live Odds Analysis
 
 ![Live Odds Analysis 1](assets/screenshots/webapp-2.png)
 ![Live Odds Analysis 2](assets/screenshots/webapp-3.png)
 
-#### SureBets Detection
+### SureBets Detection
 
 ![SureBets Detection](assets/screenshots/webapp-4.png)
 
@@ -63,26 +69,14 @@ Check out the latest working version of the app here:
    - [Node-NPM](https://nodejs.org/it/download/)
 
 2. Install global tools:
+
    ```bash
    yarn global add @angular/cli firebase-tools
    # or
    npm install -g @angular/cli firebase-tools
    ```
-   - **Angular CLI**: Version >= 8
-   - **Firebase CLI**: Version > 7.5
 
-### Steps to Set Up
-
-1. **Install Dependencies**:  
-   Open a terminal in the project folder and run:
-
-   ```bash
-   yarn install
-   # or
-   npm install
-   ```
-
-2. **Verify Global Tools**:  
+3. Verify global tools:
    Ensure Angular CLI and Firebase CLI are installed globally.  
    Use the following commands to check versions:
 
@@ -91,51 +85,63 @@ Check out the latest working version of the app here:
    firebase --version
    ```
 
-3. **Learn More**:
-   - [Angular CLI Documentation](https://angular.io/cli)
-   - [Firebase CLI Documentation](https://firebase.google.com/docs/cli)
+   Required versions:
 
-## IDE Configuration
+   - **Angular CLI**: Version >= 8
+   - **Firebase CLI**: Version > 7.5
 
-1. **Choose an IDE**:  
-   Recommended: [Visual Studio Code](https://code.visualstudio.com/) (freeware).
+### Setup Steps
 
-2. **Install VS Code Extensions**:  
-   Add these extensions for a better development experience:
-   - Angular Files (quick scaffolding)
-   - Angular Language Service (template support)
-   - Angular Snippets (powerful snippets)
-   - Debugger for Chrome
-   - HTML Format
+- Install dependencies:  
+  Open a terminal in the project folder and run:
 
-## Application Configuration
+  ```bash
+  yarn install
+  # or
+  npm install
+  ```
 
-1. **Firebase DB**:  
-   Update the following files with your Firebase DB configuration (API key, domain, etc.):
+### Configuration
+
+1. Firebase DB:  
+   This app requires the same Firebase DB used by [BetParser Crawler](https://github.com/mtmarco87/betparser_crawler). Ensure you configure the following files with the Firebase DB settings (API key, domain, URL, etc.):
 
    - `src/environment/environment.ts`
    - `src/environment/environment.prod.ts`
 
-2. **Google Maps (Optional)**:  
+> **Note**: The shared Firebase DB contains the `parsed_bets` collection, which stores the parsed betting data.
+
+2. Google Maps (Optional):  
    To enable Google Maps features, replace the `YOUR_MAPS_API_KEY` placeholder in `src/index.html` with your Google Maps API key.
 
-3. **Firebase WebApp Deployment (Optional)**:  
+3. Firebase WebApp Deployment (Optional):  
    Deploy the app to Firebase using these commands:
+
    ```bash
    ng build --prod
    firebase login --interactive
    firebase deploy
    ```
+
    Additional configuration may be required to set up the target project/cloud storage on Firebase.
 
-## UX Template
+## Usage
 
-Special thanks to [Creative Tim](https://www.creative-tim.com) for the Black Dashboard Angular UI template.  
-While heavily reworked, the app's graphical charm is due to their amazing design.
+### How to Run
 
-## Angular Framework Usage
+Run the following command to start the application:
 
-### Development Server
+```bash
+ng serve
+```
+
+Navigate to http://localhost:4200/. The app will automatically reload when source files are modified.
+
+## Development
+
+### Angular Framework
+
+#### Development Server
 
 Run the following command to start a development server:
 
@@ -145,7 +151,7 @@ ng serve
 
 Navigate to `http://localhost:4200/`. The app will automatically reload when source files are modified.
 
-### Code Scaffolding
+#### Code Scaffolding
 
 Generate a new component, directive, or other Angular elements using:
 
@@ -154,7 +160,7 @@ ng generate component component-name
 ng generate directive|pipe|service|class|guard|interface|enum|module
 ```
 
-### Build
+#### Build
 
 Build the project with:
 
@@ -168,7 +174,7 @@ For a production build, use:
 ng build --prod
 ```
 
-### Running Unit Tests
+#### Running Unit Tests
 
 Execute unit tests via [Karma](https://karma-runner.github.io):
 
@@ -176,7 +182,7 @@ Execute unit tests via [Karma](https://karma-runner.github.io):
 ng test
 ```
 
-### Running End-to-End Tests
+#### Running End-to-End Tests
 
 Execute end-to-end tests via [Protractor](http://www.protractortest.org/):
 
@@ -184,7 +190,7 @@ Execute end-to-end tests via [Protractor](http://www.protractortest.org/):
 ng e2e
 ```
 
-### Further Help
+#### Further Help
 
 To get more help on the Angular CLI, use:
 
@@ -194,9 +200,33 @@ ng help
 
 Or visit the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
----
+### IDE Configuration
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+1. **Recommended IDE**:  
+   [Visual Studio Code](https://code.visualstudio.com/) (freeware).
+
+2. **Install VS Code Extensions**:  
+   Add these extensions for a better development experience:
+   - Angular Files (quick scaffolding)
+   - Angular Language Service (template support)
+   - Angular Snippets (powerful snippets)
+   - Debugger for Chrome
+   - HTML Format
+
+## Acknowledgments
+
+Special thanks to [Creative Tim](https://www.creative-tim.com) for the Black Dashboard Angular UI template.  
+While heavily reworked, the app's graphical charm is due to their amazing design.
+
+## Support
+
+If you find this project useful, consider supporting its development:
+
+- ⭐ Star the repository to show your appreciation.
+- 💬 Share feedback or suggestions by opening an issue.
+- ☕ [Buy me a coffee](https://buymeacoffee.com/mtmarco87) to support future updates and improvements.
+- 🔵 BTC Address: `bc1qzy6e99pkeq00rsx8jptx93jv56s9ak2lz32e2d`
+- 🟣 ETH Address: `0x38cf74ED056fF994342941372F8ffC5C45E6cF21`
 
 ## License
 
