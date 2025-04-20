@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { CoreState } from 'app/core/state/core.state';
-import { MatchFilter } from 'app/pages/bets/models/MatchFilter';
-import { MatchGroup } from '../../models/MatchGroup';
-import { map } from 'rxjs/operators';
-
+import { Injectable } from "@angular/core";
+import { AngularFireDatabase } from "@angular/fire/database";
+import { AngularFireAuth } from "@angular/fire/auth";
+import { BehaviorSubject, Observable, Subscription } from "rxjs";
+import { CoreState } from "app/core/state/core.state";
+import { MatchFilter } from "app/pages/bets/models/MatchFilter";
+import { MatchGroup } from "../../models/MatchGroup";
+import { map } from "rxjs/operators";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class MatchPaginationService {
-
   private readonly dbRoot: string = "/parsed_bets";
 
   // Source data
@@ -34,24 +33,64 @@ export class MatchPaginationService {
   private _increment: number = 3;
   private _filter: MatchFilter = null;
 
-  constructor(private coreState: CoreState, private firebaseDb: AngularFireDatabase) {
-    // Subscription to retrieve all DB Data with Real time updates
-    this.initializeAll();
+  constructor(
+    private coreState: CoreState,
+    private firebaseDb: AngularFireDatabase,
+    private firebaseAuth: AngularFireAuth
+  ) {
+    // Ensure the user is authenticated before initializing data
+    this.ensureAuthenticated().then(() => {
+      // Subscription to retrieve all DB Data with Real time updates
+      this.initializeAll();
+    });
 
-    // Subscription to retrieve paginated DB Data 
+    // Subscription to retrieve paginated DB Data
     // (this subscription will change, taking more elements, with scroll down or search filter change)
     this.more(new MatchFilter());
+  }
+
+  // Ensure the user is authenticated
+  private ensureAuthenticated(): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+      // Check if a user is already signed in
+      this.firebaseAuth.authState.subscribe((user) => {
+        if (!user) {
+          // Perform anonymous authentication only if no user is signed in
+          this.firebaseAuth.auth
+            .signInAnonymously()
+            .then(() => {
+              console.log("Firebase DB: Authentication successful.");
+              resolve();
+            })
+            .catch((error) => {
+              console.warn(
+                "Firebase DB: Anonymous authentication failed. Proceeding without authentication.",
+                error
+              );
+              resolve(); // Resolve even if authentication fails
+            });
+        } else {
+          console.log(`Firebase DB: User '${user.uid}' already signed in`);
+          resolve();
+        }
+      });
+    });
   }
 
   // Retrieves all data from DB and transforms it into MatchGroup objects
   initializeAll() {
     this.coreState.setIsAppLoading(true);
-    this.firebaseDb.list(this.dbRoot).snapshotChanges().pipe(
-      map(dbMatchesWithDate => {
-        // Here is set the total count of Matches (because they are flattened in the DB before processing)
-        this._allDataCount.next(dbMatchesWithDate.length);
-        return MatchGroup.createManyFromDb(dbMatchesWithDate);
-      })).subscribe(allMatchGroups => {
+    this.firebaseDb
+      .list(this.dbRoot)
+      .snapshotChanges()
+      .pipe(
+        map((dbMatchesWithDate) => {
+          // Here is set the total count of Matches (because they are flattened in the DB before processing)
+          this._allDataCount.next(dbMatchesWithDate.length);
+          return MatchGroup.createManyFromDb(dbMatchesWithDate);
+        })
+      )
+      .subscribe((allMatchGroups) => {
         this.coreState.setIsAppLoading(false);
         // Here is set the array with the whole db data
         this._allData.next(allMatchGroups);
@@ -64,21 +103,21 @@ export class MatchPaginationService {
     if (filter) {
       this._filter = filter;
       this._done.next(false);
-    }
-    else if (this._filter) {
+    } else if (this._filter) {
       filter = this._filter;
-    }
-    else {
+    } else {
       return;
     }
 
     if (filter.Paginated) {
-      filter.TakeElems = filter.TakeElems ? filter.TakeElems + this._increment : this._increment;
+      filter.TakeElems = filter.TakeElems
+        ? filter.TakeElems + this._increment
+        : this._increment;
     }
 
     if (this._done.value || this._loading.value) {
-      return
-    };
+      return;
+    }
 
     this._loading.next(true);
     this.coreState.setIsAppLoading(true);
@@ -89,7 +128,7 @@ export class MatchPaginationService {
       this._subscribedQuery = null;
     }
 
-    this._subscribedQuery = this.allData.subscribe(matchGroups => {
+    this._subscribedQuery = this.allData.subscribe((matchGroups) => {
       // update data observable with new filtered values, set done loading
       const filteredMatchGroups = filter.applyFilter(matchGroups);
       this._data.next(filteredMatchGroups);
@@ -101,8 +140,11 @@ export class MatchPaginationService {
       }
 
       // no more values, mark done
-      if (!filter.Paginated || (filter.TakeElems >= this._allDataCount.value && !this._done.value)) {
-        this._done.next(true)
+      if (
+        !filter.Paginated ||
+        (filter.TakeElems >= this._allDataCount.value && !this._done.value)
+      ) {
+        this._done.next(true);
       }
     });
   }

@@ -22,6 +22,7 @@ By using this software, you agree that the authors are not liable for any misuse
    - [Configuration](#configuration)
 6. [Usage](#usage)
    - [How to Run](#how-to-run)
+   - [How to Deploy](#how-to-deploy)
 7. [Development](#development)
    - [Angular Framework](#angular-framework)
    - [IDE Configuration](#ide-configuration)
@@ -63,20 +64,18 @@ Check out the latest working version of the app here:
 
 ### Prerequisites
 
-1. Install a package manager:
+1. **Install Node Package Manager**:
 
-   - [Yarn](https://yarnpkg.com/lang/en/docs/install/#windows-stable) (recommended)
    - [Node-NPM](https://nodejs.org/it/download/)
 
-2. Install global tools:
+2. **Install Global Tools**:  
+   Run the following command to install the required tools globally:
 
    ```bash
-   yarn global add @angular/cli firebase-tools
-   # or
    npm install -g @angular/cli firebase-tools
    ```
 
-3. Verify global tools:
+3. **Verify Global Tools**:
    Ensure Angular CLI and Firebase CLI are installed globally.  
    Use the following commands to check versions:
 
@@ -92,38 +91,66 @@ Check out the latest working version of the app here:
 
 ### Setup Steps
 
-- Install dependencies:  
+- **Install Dependencies**:  
   Open a terminal in the project folder and run:
 
   ```bash
-  yarn install
-  # or
   npm install
   ```
 
 ### Configuration
 
-1. Firebase DB:  
-   This app requires the same Firebase DB used by [BetParser Crawler](https://github.com/mtmarco87/betparser_crawler). Ensure you configure the following files with the Firebase DB settings (API key, domain, URL, etc.):
+#### **1. Firebase DB**
 
-   - `src/environment/environment.ts`
-   - `src/environment/environment.prod.ts`
+The BetParser WebApp uses the same Firebase DB as the [BetParser Crawler](https://github.com/mtmarco87/betparser_crawler). Ensure you configure the environment files (`src/environment/environment.*.ts`) with the Firebase DB settings (API key, domain, URL, etc.).
 
-> **Note**: The shared Firebase DB contains the `parsed_bets` collection, which stores the parsed betting data.
+> **Note**: The shared Firebase database contains the `parsed_bets` collection, which stores the parsed betting data.
 
-2. Google Maps (Optional):  
-   To enable Google Maps features, replace the `YOUR_MAPS_API_KEY` placeholder in `src/index.html` with your Google Maps API key.
+The app only requires **read access** to the Firebase DB. **Write access** is not needed.
 
-3. Firebase WebApp Deployment (Optional):  
-   Deploy the app to Firebase using these commands:
+##### **1. Quick Setup for Testing**
 
-   ```bash
-   ng build --prod
-   firebase login --interactive
-   firebase deploy
-   ```
+For quick testing, you can allow open read access by using the following Firebase DB rules:
 
-   Additional configuration may be required to set up the target project/cloud storage on Firebase.
+```json
+{
+  "rules": {
+    ".read": true,
+    ".write": false
+  }
+}
+```
+
+> **Warning**: This setup provides minimal security. Anyone with the database URL will be able to read your data.
+
+##### **2. Secure Setup for Production**
+
+For better security, require authentication for read access:
+
+```json
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": false
+  }
+}
+```
+
+Then, enable **Anonymous Authentication** in the Firebase Console:
+
+1. Go to **Authentication** > **Sign-in method**.
+2. Enable **Anonymous** authentication.
+
+> **How It Works**:  
+> The BetParser WebApp will automatically handle anonymous authentication using the Firebase API key and settings provided in the environment files. Once authenticated, the app will seamlessly access the database.
+
+> **Note**: The crawler uses admin credentials to write data to the database. You don’t need to enable write access in the db rules.
+
+#### **2. Google Maps (Optional)**
+
+To enable Google Maps features, ensure your Google Maps API key is added to the `googleMaps` property in the environment files (`src/environment/environment.*.ts`).
+
+> **Note**: Ensure that your Google Maps API key has the necessary permissions enabled (e.g., Maps JavaScript API) in the Google Cloud Console.
 
 ## Usage
 
@@ -136,6 +163,30 @@ ng serve
 ```
 
 Navigate to http://localhost:4200/. The app will automatically reload when source files are modified.
+
+### How to Deploy
+
+To deploy the app to Firebase, follow these steps:
+
+1. Build the project for production:
+
+```bash
+ng build --prod
+```
+
+2. Log in to Firebase:
+
+```bash
+firebase login --interactive
+```
+
+3. Deploy the app:
+
+```bash
+firebase deploy
+```
+
+> Note: Additional configuration may be required to set up the target project/cloud storage on Firebase.
 
 ## Development
 
