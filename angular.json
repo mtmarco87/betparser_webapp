@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "betparserWebApp": {
+    "betparser-web-app": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/betparserWebApp",
+            "outputPath": "dist/betparser-web-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -65,18 +65,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "betparserWebApp:build"
+            "browserTarget": "betparser-web-app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "betparserWebApp:build:production"
+              "browserTarget": "betparser-web-app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "betparserWebApp:build"
+            "browserTarget": "betparser-web-app:build"
           }
         },
         "test": {
@@ -109,35 +109,7 @@
           }
         }
       }
-    },
-    "betparserWebApp-e2e": {
-      "root": "e2e/",
-      "projectType": "application",
-      "prefix": "",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "betparserWebApp:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "betparserWebApp:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "e2e/tsconfig.e2e.json",
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
     }
   },
-  "defaultProject": "betparserWebApp"
+  "defaultProject": "betparser-web-app"
 }

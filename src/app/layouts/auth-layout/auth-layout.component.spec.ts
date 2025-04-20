@@ -1,16 +1,17 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { AuthLayoutComponent } from './auth-layout.component';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { AuthLayoutComponent } from "./auth-layout.component";
+import { RouterTestingModule } from "@angular/router/testing";
+import { NgbCollapseModule } from "@ng-bootstrap/ng-bootstrap";
 
-
-describe('AuthLayoutComponent', () => {
+describe("AuthLayoutComponent", () => {
   let component: AuthLayoutComponent;
   let fixture: ComponentFixture<AuthLayoutComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AuthLayoutComponent ]
-    })
-    .compileComponents();
+      declarations: [AuthLayoutComponent],
+      imports: [RouterTestingModule, NgbCollapseModule],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -19,7 +20,7 @@ describe('AuthLayoutComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it("should be created", () => {
     expect(component).toBeTruthy();
   });
 });

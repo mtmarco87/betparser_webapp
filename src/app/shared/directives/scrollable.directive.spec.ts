@@ -1,7 +1,7 @@
-import { ScrollableDirective } from './scrollable.directive';
+import { ScrollableDirective } from "./scrollable.directive";
 
-describe('ScrollableDirective', () => {
-  it('should create an instance', () => {
+describe("Directive: Scrollable", () => {
+  it("should be created", () => {
     const directive = new ScrollableDirective(null);
     expect(directive).toBeTruthy();
   });

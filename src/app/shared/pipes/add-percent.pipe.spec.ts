@@ -1,10 +1,7 @@
-/* tslint:disable:no-unused-variable */
+import { AddPercentPipe } from "./add-percent.pipe";
 
-import { TestBed, async } from '@angular/core/testing';
-import { AddPercentPipe } from './add-percent.pipe';
-
-describe('Pipe: AddPercente', () => {
-  it('create an instance', () => {
+describe("Pipe: AddPercent", () => {
+  it("should be created", () => {
     let pipe = new AddPercentPipe();
     expect(pipe).toBeTruthy();
   });

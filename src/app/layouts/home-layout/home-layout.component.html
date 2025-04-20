@@ -1,19 +1,28 @@
 <div class="wrapper">
   <div class="main-panel">
-    <app-navbar [showSideBarToggler]=false [showMenuToggler]=false></app-navbar>
-    <div class=" sub-wrapper col-md-12">
-      <div class=" card">
-        <div class=" card-body">
+    <app-navbar
+      [showSideBarToggler]="false"
+      [showMenuToggler]="false"
+    ></app-navbar>
+    <div class="sub-wrapper col-md-12">
+      <div class="card">
+        <div class="card-body">
           <br />
           <!-- Banner -->
           <section id="banner">
             <div class="inner">
               <h1>Welcome to BetParser</h1>
-              <p>A fully responsive surebet forecaster by EmaMarcoFricaTrina</p>
+              <p>
+                A fully responsive surebet forecaster by Marco Trinastich &
+                Emanuele Fricano
+              </p>
               <br />
               <br />
               <div class="centered">
-                <button (click)="startButtonCallback()" class=" btn btn-success btn-block">
+                <button
+                  (click)="startButtonCallback()"
+                  class="btn btn-success btn-block"
+                >
                   Start
                 </button>
               </div>
@@ -27,4 +36,7 @@
     <app-footer></app-footer>
   </div>
 </div>
-<app-fixed-plugin [canChangeSidebarColor]=false [canChangeDashboardColor]=true></app-fixed-plugin>
+<app-fixed-plugin
+  [canChangeSidebarColor]="false"
+  [canChangeDashboardColor]="true"
+></app-fixed-plugin>

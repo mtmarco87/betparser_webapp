@@ -1,14 +1,13 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { FixedPluginComponent } from "./fixed-plugin.component";
 
-
 describe("FixedPluginComponent", () => {
   let component: FixedPluginComponent;
   let fixture: ComponentFixture<FixedPluginComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [FixedPluginComponent]
+      declarations: [FixedPluginComponent],
     }).compileComponents();
   }));
 
@@ -18,7 +17,7 @@ describe("FixedPluginComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it("should be created", () => {
     expect(component).toBeTruthy();
   });
 });

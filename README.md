@@ -64,43 +64,48 @@ Check out the latest working version of the app here:
 
 ### Prerequisites
 
-1. **Install Node Package Manager**:
+#### **1. Install [Node Package Manager](https://nodejs.org/it/download/)**
 
-   - [Node-NPM](https://nodejs.org/it/download/)
+> Recommended versions: **12-14** (best compatibility). Limited support for **16+** (app runs, but some unit tests may fail).
 
-2. **Install Global Tools**:  
-   Run the following command to install the required tools globally:
+#### **2. Install Global Tools**:
 
-   ```bash
-   npm install -g @angular/cli firebase-tools
-   ```
+Run the following command to install the required tools globally:
 
-3. **Verify Global Tools**:
-   Ensure Angular CLI and Firebase CLI are installed globally.  
-   Use the following commands to check versions:
+```bash
+npm install -g @angular/cli firebase-tools
+```
 
-   ```bash
-   ng version
-   firebase --version
-   ```
+#### **3. Verify Global Tools**:
 
-   Required versions:
+Ensure Angular CLI and Firebase CLI are installed globally.  
+ Use the following commands to check versions:
 
-   - **Angular CLI**: Version >= 8
-   - **Firebase CLI**: Version > 7.5
+```bash
+ng version
+firebase --version
+```
+
+> Required versions:
+>
+> - **Angular CLI**: Version >= 8
+> - **Firebase CLI**: Version > 7.5
 
 ### Setup Steps
 
-- **Install Dependencies**:  
-  Open a terminal in the project folder and run:
+#### **Install Dependencies**:
 
-  ```bash
-  npm install
-  ```
+Open a terminal in the project folder and run:
+
+```bash
+npm install
+```
 
 ### Configuration
 
 #### **1. Firebase DB**
+
+##### **Environment Files**
 
 The BetParser WebApp uses the same Firebase DB as the [BetParser Crawler](https://github.com/mtmarco87/betparser_crawler). Ensure you configure the environment files (`src/environment/environment.*.ts`) with the Firebase DB settings (API key, domain, URL, etc.).
 
@@ -108,7 +113,7 @@ The BetParser WebApp uses the same Firebase DB as the [BetParser Crawler](https:
 
 The app only requires **read access** to the Firebase DB. **Write access** is not needed.
 
-##### **1. Quick Setup for Testing**
+##### **Quick Setup for Testing**
 
 For quick testing, you can allow open read access by using the following Firebase DB rules:
 
@@ -123,7 +128,7 @@ For quick testing, you can allow open read access by using the following Firebas
 
 > **Warning**: This setup provides minimal security. Anyone with the database URL will be able to read your data.
 
-##### **2. Secure Setup for Production**
+##### **Secure Setup for Production**
 
 For better security, require authentication for read access:
 
@@ -231,14 +236,6 @@ Execute unit tests via [Karma](https://karma-runner.github.io):
 
 ```bash
 ng test
-```
-
-#### Running End-to-End Tests
-
-Execute end-to-end tests via [Protractor](http://www.protractortest.org/):
-
-```bash
-ng e2e
 ```
 
 #### Further Help

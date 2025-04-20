@@ -1,11 +1,10 @@
-/* tslint:disable:no-unused-variable */
+import { ElementRef } from "@angular/core";
+import { ClickOutsideDirective } from "./clickoutside.directive";
 
-import { TestBed, async } from '@angular/core/testing';
-import { ClickoutsideDirective } from './clickoutside.directive';
-
-describe('Directive: Clickoutside', () => {
-  it('should create an instance', () => {
-    const directive = new ClickoutsideDirective();
+describe("Directive: Clickoutside", () => {
+  it("should be created", () => {
+    const mockElementRef = { nativeElement: document.createElement("div") };
+    const directive = new ClickOutsideDirective(mockElementRef as ElementRef);
     expect(directive).toBeTruthy();
   });
 });

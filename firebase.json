@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/betparserWebApp",
+    "public": "dist/betparser-web-app",
     "ignore": [
       "firebase.json",
       "**/.*",

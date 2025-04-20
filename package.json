@@ -1,21 +1,30 @@
 {
   "name": "betparser-web-app",
   "version": "1.1.1",
-  "description": "BetParserWebApp, a Creative Tim Desgin. Coded by EmaMarcoFricaTrina",
+  "description": "BetParserWebApp is a web application that allows users to analyze betting data from various sources. It provides a user-friendly interface for managing and visualizing betting information, making it easier for users to make informed decisions based on the data.",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mtmarco87/betparser_webapp"
   },
-  "author": "EmaMarcoFricaTrina <emamarcotrinafrica@gmail.com> (https://www.emamarcofricatrina.com/)",
+  "author": "Marco Trinastich <mt.marco87@gmail.com>",
+  "contributors": [
+    {
+      "name": "Marco Trinastich",
+      "email": "mt.marco87@gmail.com"
+    },
+    {
+      "name": "Emanuele Fricano",
+      "email": "emanuelefricano93@gmail.com"
+    }
+  ],
   "license": "commercial",
   "private": true,
   "dependencies": {
@@ -46,7 +55,6 @@
     "@angular/language-service": "^8.2.8",
     "@types/google.maps": "^3.58.1",
     "@types/jasmine": "~3.8.0",
-    "@types/jasminewd2": "~2.0.8",
     "@types/node": "~12.7.8",
     "codelyzer": "~5.1.2",
     "jasmine-core": "~3.8.0",
@@ -56,7 +64,7 @@
     "karma-coverage-istanbul-reporter": "~2.1.0",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.7.0",
-    "protractor": "~5.4.2",
+    "karma-spec-reporter": "^0.0.36",
     "ts-node": "~8.4.1",
     "tslint": "~5.20.0",
     "typescript": "3.5.1"

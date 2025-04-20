@@ -1,10 +1,7 @@
-/* tslint:disable:no-unused-variable */
+import { FilterNaPipe } from "./filter-na.pipe";
 
-import { TestBed, async } from '@angular/core/testing';
-import { FilterNaPipe } from './filter-na.pipe';
-
-describe('Pipe: FilterNae', () => {
-  it('create an instance', () => {
+describe("Pipe: Filter N/A", () => {
+  it("should be created", () => {
     let pipe = new FilterNaPipe();
     expect(pipe).toBeTruthy();
   });
